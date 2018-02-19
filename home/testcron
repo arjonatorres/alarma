@@ -1,0 +1,1 @@
+27 14 * * * pi sudo python /home/pi/p2.py

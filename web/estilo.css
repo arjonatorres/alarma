@@ -1,0 +1,112 @@
+html {
+	position:relative;
+	height:100%;
+}
+body {
+			background-image: url(imagenes/fondo.jpg); background-position: center center; background-repeat: no-repeat;
+			background-attachment: fixed; background-size: 100% 100%; background-color: black;color: white; height:100%;margin:0px;
+
+	}
+	table.menu {
+		width:100%;
+		margin:0px;
+	}
+	td.menu {
+		height:150px;
+		font-size:70px;
+	}
+	tr.menu {
+		width:100%;
+		max-width:100%;
+		background: rgba(0, 0, 0, 1);background: linear-gradient(#777777, #000000);
+	}
+	table.boton {
+			width:100%;
+	}
+	td.camara {
+		text-align:center;
+		-webkit-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		-moz-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		border-radius: 40px; font-size:xx-large;
+	}
+	td.boton {
+		height:100px;
+		width:100px;
+		max-width:100px;
+		max-height:100px;
+		text-align:center;
+		line-height:60px;
+		-webkit-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		-moz-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		border-radius: 40px; font-size:xx-large;
+	}
+	td.posicion {
+		background: rgba(0, 0, 0, 1);background: linear-gradient(#777777, #000000);
+		-webkit-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		-moz-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		border-radius: 40px; font-size:xx-large;
+	}
+
+	tr.boton {
+		background: rgba(0, 0, 0, 0.5);
+		height:100px;
+		width:100px;
+		max-width:100px;
+	}
+	tr.persianas {
+		height:100px;
+		width:100px;
+		max-width:100px;
+	}
+	td.luces {
+		padding:10px;
+		-webkit-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		-moz-box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		box-shadow: inset 0px 0px 32px 0px rgba(0,0,0,1);
+		border-radius: 40px; font-size:xx-large;
+	}
+	p.luces {
+		font-size:50px;
+		float:left;
+		margin-top:45px;
+		margin-left:50px;
+		margin-bottom:0px;
+		vertical-align: middle;
+		padding:0px
+	}
+	p.per {
+		font-size:50px;
+		float:left;
+		margin-top:30px;
+		margin-left:50px;
+		margin-bottom:0px;
+		vertical-align: middle;
+		padding:0px
+	}
+	p.persianas {
+		font-size:50px;
+		text-align:center;
+		margin-top:10px;
+		margin-bottom:10px;
+		vertical-align: middle;
+		padding:0px
+	}
+	img.boton {
+		padding: 20px;
+		padding-bottom:0px;
+		height: 227px;
+	}
+	img.menu {
+		padding:0px;
+	}
+	img.luces {
+		float:right;
+		filter:grayscale(100%)
+	}
+	img.persianas {
+		float:right;
+		width:175px
+	}

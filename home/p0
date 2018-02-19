@@ -1,0 +1,1 @@
+#00 22 * * * pi sudo python /home/pi/p0.py
