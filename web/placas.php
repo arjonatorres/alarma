@@ -52,6 +52,7 @@ $resultado = $pdo->query("SELECT TEMP
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <!-- <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon"> -->
         <link rel=StyleSheet href="estilo.css" type="text/css">
+        <meta name='viewport' content='user-scalable=0'>
     </head>
 
 <body>
@@ -162,8 +163,8 @@ $resultado = $pdo->query("SELECT TEMP
         function envio() {
             $.getJSON('placas.php', {fecha: $('#fech').val()}, function(data) {
                 $('#maxc').text(`Max: ${data.max} ºC`);
-                $('#minc').text(`Max: ${data.min} ºC`);
-                $('#medc').text(`Max: ${data.avg} ºC`);
+                $('#minc').text(`Min: ${data.min} ºC`);
+                $('#medc').text(`Med: ${data.avg} ºC`);
                 $('#chart-area').remove();
                 $('.canv').append($('<canvas id="chart-area" width="850" height="500" style="margin:30px; margin-top:0px"></canvas>'));
                 pintaDatos(data.results);

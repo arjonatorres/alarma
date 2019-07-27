@@ -14,6 +14,7 @@ if (!comprobarLogueado()){
         <script src="auxiliar.js" charset="utf-8"></script>
         <link rel="icon" href="http://arjonatorres.ddns.net/php/imagenes/home.png" type="image/png">
         <link rel=StyleSheet href="estilo.css" type="text/css">
+        <meta name='viewport' content='user-scalable=0'>
     </head>
 
     <?php
