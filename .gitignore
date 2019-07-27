@@ -3,3 +3,7 @@
 
 # Insertar usuarios BD
 /home/usuariosinsert.sql
+
+.idea/
+/home/copia*.sql
+/home/log*.txt
