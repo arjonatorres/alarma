@@ -13,6 +13,7 @@ if (!comprobarLogueado()){
         <script src="auxiliar.js" charset="utf-8"></script>
 		<link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon">
     	<link rel=StyleSheet href="estilo.css" type="text/css">
+        <meta name='viewport' content='user-scalable=0'>
 	</head>
 
     <?php
@@ -49,7 +50,7 @@ if (!comprobarLogueado()){
 	cabeceraMenu('Persianas', 'blind-icon');
 	?>
 
-	<!-- <table class=boton border="0" cellpadding="0" style="padding:40px; padding-bottom:5px;">
+	<table class=boton border="0" cellpadding="0" style="padding:40px; padding-bottom:5px;">
     	<tr class=persianas >
     		<td align="center" >
     		<table cellspacing="0" cellpadding="0" align="center" border="0">
@@ -70,7 +71,7 @@ if (!comprobarLogueado()){
     		</table>
     		</td>
     	</tr>
-	</table> -->
+	</table>
 
 	<table class=boton border="0" cellpadding="0" style="padding:40px; padding-bottom:5px; padding-top:10px;">
     	<tr class=persianas>
@@ -95,7 +96,7 @@ if (!comprobarLogueado()){
     	</tr>
 	</table>
 
-	<!-- <table class=boton border="0" cellpadding="0" style="padding:40px; padding-bottom:5px; padding-top:10px;">
+	<table class=boton border="0" cellpadding="0" style="padding:40px; padding-bottom:5px; padding-top:10px;">
     	<tr class=persianas>
     		<td align="center" >
     		<table cellspacing="0" cellpadding="0" align="center" border="0">
@@ -116,7 +117,7 @@ if (!comprobarLogueado()){
     		</table>
     		</td>
     	</tr>
-	</table> -->
+	</table>
 
 	<table class=boton border="0" cellpadding="0" style="padding:40px; padding-bottom:5px; padding-top:10px;">
     	<tr class=persianas>

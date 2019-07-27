@@ -26,6 +26,7 @@ $salida = file_get_contents('/home/pi/estado_alarma.txt');
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <!-- <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon"> -->
         <link rel=StyleSheet href="estilo.css" type="text/css">
+        <meta name='viewport' content='user-scalable=0'>
         <style media="screen">
             .ojo {
                 width: 200px;
