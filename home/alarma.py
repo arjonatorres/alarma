@@ -29,6 +29,7 @@ vol2 = 16
 vol3 = 20
 vol4 = 21
 vol5 = 26
+corriente = 17
 
 #Inicializacion de entradas y salidas GPIO
 GPIO.cleanup()
@@ -37,6 +38,7 @@ GPIO.setup(pir1,GPIO.IN)
 GPIO.setup(pir2,GPIO.IN)
 GPIO.setup(pir3,GPIO.IN)
 GPIO.setup(puerta,GPIO.IN)
+GPIO.setup(corriente,GPIO.IN)
 GPIO.setup(buzz,GPIO.OUT)
 GPIO.setup(sirena,GPIO.OUT)
 GPIO.setup(vol1,GPIO.OUT)
@@ -341,6 +343,28 @@ def sensores():
 		                saltoalarma(4)
 		                leer()
 
+#Funcion para ver si hay corriente 220v
+def sensor220v():
+    global xcorriente
+    #Se va la corriente
+    if ((estadot == '0' or estadot == '1') and (xcorriente == 0) and (not(GPIO.input(corriente)))):
+        xcorriente = 1
+        enviar("Corriente 220v interrumpida",1)
+        log("Corriente 220v interrumpida")
+        enviarmailjose("Corriente 220v interrumpida",1)
+        enviarmailro("Corriente 220v interrumpida",1)
+        time.sleep(0.5)
+
+    #Vuelve la corriente
+    if ((estadot == '0' or estadot == '1') and (xcorriente == 1) and (GPIO.input(corriente))):
+        xcorriente = 0
+        enviar("Corriente 220v restablecida",1)
+        log("Corriente 220v restablecida")
+        enviarmailjose("Corriente 220v restablecida",1)
+        enviarmailro("Corriente 220v restablecida",1)
+        time.sleep(0.5)
+
+
 #Cuerpo principal
 
 if ping():
@@ -355,6 +379,8 @@ time.sleep(3)
 global xstatus
 xstatus = 0
 
+xcorriente = 0
+
 while True:
 	xstatus = 0
 	activar=0
@@ -365,6 +391,7 @@ while True:
 		GPIO.output(lectura,False)
 
 	sensores()
+	sensor220v()
 #	print "ok"
 	if (estadot == '3'):
 		escribir("1")
