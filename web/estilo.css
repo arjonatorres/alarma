@@ -110,3 +110,6 @@ body {
 		float:right;
 		width:175px
 	}
+	td.go:active {
+		background: rgba(0, 0, 0, 0.4);
+	}

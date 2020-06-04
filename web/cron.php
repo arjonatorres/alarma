@@ -8,17 +8,9 @@ if (!comprobarLogueado()){
 }
 ?>
 <html>
-    <head>
-        <title>Cron</title>
-        <script src="auxiliar.js" charset="utf-8"></script>
-        <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon">
-        <link rel=StyleSheet href="estilo.css" type="text/css">
-        <meta name='viewport' content='user-scalable=0'>
-    </head>
+<?php require('cabecera.php'); ?>
 
-    <?php
-    $salida = file_get_contents('/home/pi/estado_alarma.txt');
-
+<?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ps0 = $_POST['p0'];
         $on = $_POST['on'];

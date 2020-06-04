@@ -34,7 +34,6 @@ if (isset($_GET['fecha'])) {
     return;
 }
 
-$salida = file_get_contents('/home/pi/estado_alarma.txt');
 $fecha = date("Y-m-d");
 
 $pdo = conectar();
@@ -45,17 +44,9 @@ $resultado = $pdo->query("SELECT TEMP
     $actual = $resultado->fetchColumn(); //$salida5
 ?>
 <html>
-    <head>
-        <title>Placas</title>
-        <script src="auxiliar.js" charset="utf-8"></script>
-        <script src="Chart.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon"> -->
-        <link rel=StyleSheet href="estilo.css" type="text/css">
-        <meta name='viewport' content='user-scalable=0'>
-    </head>
-
+<?php require('cabecera.php'); ?>
 <body>
+<script src="Chart.js"></script>
 	<?php
 	cabeceraMenu('Placas solares', 'solar-panel-icon2');
 	?>

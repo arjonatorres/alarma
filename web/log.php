@@ -11,15 +11,8 @@ $x = $x?: '';
 
 ?>
 <html>
-    <head>
-        <title>Log<?= $x ?>.txt</title>
-        <script src="auxiliar.js" charset="utf-8"></script>
-        <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon">
-        <link rel=StyleSheet href="estilo.css" type="text/css">
-        <meta name='viewport' content='user-scalable=0'>
-    </head>
+<?php require('cabecera.php'); ?>
     <?php
-    $salida = file_get_contents('/home/pi/estado_alarma.txt');
     exec("sudo cp -f /home/pi/log{$x}.txt /var/www/html/php");
     $texto = file_get_contents("log{$x}.txt");
     $texto = nl2br($texto);

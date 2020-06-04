@@ -8,14 +8,7 @@ if (!comprobarLogueado()){
 }
 ?>
 <html>
-    <head>
-	    <title>Alarma</title>
-        <script src="auxiliar.js" charset="utf-8"></script>
-	    <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon">
-        <link rel=StyleSheet href="estilo.css" type="text/css">
-        <meta name='viewport' content='user-scalable=0'>
-    </head>
-
+<?php require('cabecera.php'); ?>
 <?php
 	if (!empty($_POST)) {
 		if ($_POST['orden']=="0"){
@@ -29,7 +22,6 @@ if (!comprobarLogueado()){
 		exec("sudo python /home/pi/php/lectura.py");
         return;
 	}
-    $salida = file_get_contents('/home/pi/estado_alarma.txt');
 
 ?>
 <body>
@@ -63,7 +55,7 @@ if (!comprobarLogueado()){
 
 	<?php pieMenu($salida); ?>
     <script>
-        alarmaphp = '<?= $salida[0]?>';
+        alarmaphp = '<?= $salida ?>';
         alarmaphp = alarmaphp == '6' ? '0': alarmaphp;
         http_request = new XMLHttpRequest();
         cambiar();
