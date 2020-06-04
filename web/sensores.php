@@ -16,36 +16,27 @@ if (isset($_GET['peticion'])) {
     return;
 }
 
-$salida = file_get_contents('/home/pi/estado_alarma.txt');
-
 ?>
 <html>
-    <head>
-        <title>Sensores</title>
-        <script src="auxiliar.js" charset="utf-8"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon"> -->
-        <link rel=StyleSheet href="estilo.css" type="text/css">
-        <meta name='viewport' content='user-scalable=0'>
-        <style media="screen">
-            .ojo {
-                width: 200px;
-            }
-            .div-ojo {
-                margin: 20px;
-                display: inline;
-            }
-            .boton {
-                padding: 40px;
-            }
-            .div-boton input {
-                margin-top: 40px;
-                font-size: 70px;
-            }
-        </style>
-    </head>
+<?php require('cabecera.php'); ?>
 
 <body>
+<style media="screen">
+    .ojo {
+        width: 200px;
+    }
+    .div-ojo {
+        margin: 20px;
+        display: inline;
+    }
+    .boton {
+        padding: 40px;
+    }
+    .div-boton input {
+        margin-top: 40px;
+        font-size: 70px;
+    }
+</style>
 	<?php
 	cabeceraMenu('Sensores', 'motion');
 	?>

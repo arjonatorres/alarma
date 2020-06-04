@@ -8,13 +8,7 @@ if (!comprobarLogueado()){
 }
 ?>
 <html>
-    <head>
-        <title>Luces</title>
-        <script src="auxiliar.js" charset="utf-8"></script>
-        <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon">
-        <link rel=StyleSheet href="estilo.css" type="text/css">
-        <meta name='viewport' content='user-scalable=0'>
-    </head>
+<?php require('cabecera.php'); ?>
 
     <?php
     $orden = filter_input(INPUT_POST, 'orden', FILTER_VALIDATE_INT);
@@ -24,7 +18,6 @@ if (!comprobarLogueado()){
             exec("sudo python /home/pi/php/ls$orden.py");
         }
     }
-    $salida = file_get_contents('/home/pi/estado_alarma.txt');
     exec("sudo python /home/pi/php/lucesphp.py", $light);
 
     function filas($light)

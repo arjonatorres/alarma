@@ -1,5 +1,7 @@
 <?php
 
+$dev = (gethostname() != 'raspberrypi');
+
 function cabeceraMenu($titulo, $imagen = 'home', $volver = false)
 {
     ?>

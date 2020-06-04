@@ -13,7 +13,7 @@ require 'auxiliar.php';
     <title>Login</title>
     <link rel="shortcut icon" href="arjonatorres.ddns.net/php/mifavicon.png" type="image/x-icon">
     <link rel=StyleSheet href="estilo.css" type="text/css">
-    <meta charset = "utf-8">
+    <meta name='viewport' content='user-scalable=0'>
 </head>
 
 <body>
