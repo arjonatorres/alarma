@@ -2,7 +2,6 @@
 
 $dev = (gethostname() != 'raspberrypi');
 $pdo = conectar();
-$codigosPersianas = getCodigosPersianas();
 $username = '';
 
 function conectar()
@@ -153,7 +152,7 @@ function escribirLog($pdo, $mensaje)
 function getSensores($pdo)
 {
     $sent = $pdo->prepare('SELECT * FROM sensores ORDER BY pin');
-    $sent->execute([':token' => $token]);
+    $sent->execute();
     return $sent->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -193,26 +192,46 @@ function ultimaAccionAlarma($pdo) {
     return $mensaje;
 }
 
-function getCodigosPersianas()
+function getHabitaciones($pdo)
 {
-    return [
-        'per_all' => '0x1A',
-        'per_central' => '0x1B',
-        'per_pbaja' => '0x1D',
-        'per_palta' => '0x1E',
-        'per_paonorte' => '0x1F',
-        'per_paosur' => '0x20',
-        'per_switch1' => '0x62',
-        'per_switch2' => '0x63',
-        'per_subir' => '0x64',
-        'per_bajar' => '0x65',
-        'per_pos1' => '0x66',
-        'per_pos2' => '0x67',
-        'per_pos3' => '0x68',
-        'per_grabar' => '0x69',
-        'per_solicitar' => '0x6A',
-        'per_parar' => '0x6B',
-        'per_onorte' => '0x6C',
-        'per_osur' => '0x6D'
-    ];
+    $sent = $pdo->prepare('SELECT * FROM habitaciones ORDER BY id');
+    $sent->execute();
+    return $sent->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPersianas($pdo)
+{
+    $sent = $pdo->prepare('SELECT * FROM persianas');
+    $sent->execute();
+    $persql = $sent->fetchAll(PDO::FETCH_ASSOC);
+    $pers = [];
+    foreach ($persql as $per) {
+        $pers[$per['habitacion_id']][] = $per;
+    }
+    return $pers;
+}
+
+function getActuadores($pdo)
+{
+    $sent = $pdo->prepare('SELECT * FROM actuadores ORDER BY switch');
+    $sent->execute();
+    $actsql = $sent->fetchAll(PDO::FETCH_ASSOC);
+    $acts = [];
+    foreach ($actsql as $act) {
+        $acts[$act['habitacion_id']][] = $act;
+    }
+    return $acts;
+}
+
+function getCodigosPersianas($pdo)
+{
+    $sent = $pdo->prepare("SELECT * FROM parametros WHERE nombre LIKE 'per_%'");
+    $sent->execute();
+    $params = $sent->fetchAll();
+    $codigos = [];
+    foreach ($params as $param) {
+        $codigos[$param[0]] = $param[1];
+    }
+
+    return $codigos;
 }

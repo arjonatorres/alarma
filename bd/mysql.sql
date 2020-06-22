@@ -16,8 +16,9 @@ CREATE TABLE usuarios
 DROP TABLE IF EXISTS parametros CASCADE;
 CREATE TABLE parametros
 (
-  nombre VARCHAR(16) PRIMARY KEY,
-  valor  VARCHAR(255)
+  nombre    VARCHAR(255) PRIMARY KEY,
+  valor     VARCHAR(255),
+  adicional VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS logs CASCADE;
@@ -39,16 +40,17 @@ CREATE TABLE placas
 DROP TABLE IF EXISTS habitaciones CASCADE;
 CREATE TABLE habitaciones
 (
-  id     SERIAL       PRIMARY KEY,
+  id     SERIAL        PRIMARY KEY,
+  codigo VARCHAR(2),
   nombre VARCHAR(255),
-  icono  VARCHAR(255)
+  icono  VARCHAR(255),
+  tipo   VARCHAR(10)
 );
 
 DROP TABLE IF EXISTS persianas CASCADE;
 CREATE TABLE persianas
 (
   id            SERIAL             PRIMARY KEY,
-  codigo        VARCHAR(10),
   habitacion_id BIGINT(20) unsigned,
   posicion1     NUMERIC(3),
   posicion2     NUMERIC(3),
@@ -62,9 +64,8 @@ CREATE TABLE actuadores
 (
   id            SERIAL             PRIMARY KEY,
   nombre        VARCHAR(255),
-  codigo        VARCHAR(10),
   tipo          VARCHAR(10),
-  switch        VARCHAR(255),
+  switch        NUMERIC(2),
   icono         VARCHAR(255),
   habitacion_id BIGINT(20) unsigned,
   CONSTRAINT fk_act_hab_id         FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id)
@@ -90,52 +91,54 @@ CREATE TABLE rfid
 
 
 -- Insertamos algunos valores
-INSERT INTO parametros (nombre, valor)
-  VALUES ('estado_alarma', '0'),
-         ('per_all', '0x1A 0x14 0x15 0x16 0x17 0x18 0x19'),
-         ('per_central', '0x1B'),
-         ('per_pbaja', '0x1D 0x14 0x15'),
-         ('per_palta', '0x1E 0x16 0x17 0x18 0x19'),
-         ('per_paonorte', '0x1F 0x18 0x19'),
-         ('per_paosur', '0x20 0x16 0x17'),
-         ('per_switch1', '0x62'),
-         ('per_switch2', '0x63'),
-         ('per_subir', '0x64'),
-         ('per_bajar', '0x65'),
-         ('per_pos1', '0x66'),
-         ('per_pos2', '0x67'),
-         ('per_pos3', '0x68'),
-         ('per_grabar', '0x69'),
-         ('per_solicitar', '0x6A'),
-         ('per_parar', '0x6B'),
-         ('per_onorte', '0x6C 0x15 0x18 0x19'),
-         ('per_osur', '0x6D 0x14 0x16 0x17'),
-         ('per_switch3', '0x70'),
-         ('per_switch4', '0x71'),
-         ('per_switch5', '0x72'),
-         ('per_switch6', '0x73'),
-         ('per_switch7', '0x74'),
-         ('per_switch8', '0x75');
+INSERT INTO parametros (nombre, valor, adicional)
+  VALUES ('estado_alarma', '0', DEFAULT),
+         ('per_central', '0A', DEFAULT),
+         ('per_all', '60 10 11 12 13 14 15', DEFAULT),
+         ('per_pbaja', '61 10 11', 'planta baja'),
+         ('per_palta', '62 12 13 14 15', 'planta alta'),
+         ('per_onorte', '63 11 14 15', 'norte'),
+         ('per_osur', '64 10 12 13', 'sur'),
+         ('per_paonorte', '65 14 15', 'planta alta norte'),
+         ('per_paosur', '66 12 13', 'planta alta sur'),
+         ('per_bajar', '70', 'subiendo'),
+         ('per_pos1', '71', 'posicion 1'),
+         ('per_pos2', '72', 'posicion 2'),
+         ('per_pos3', '73', 'posicion 3'),
+         ('per_subir', '74', 'bajando'),
+         ('per_grabar', '75', 'grabar'),
+         ('per_solicitar', '76', 'solicitar'),
+         ('per_solicitar_eeprom', '77', 'solicitar eeprom'),
+         ('per_parar', '78', 'parar'),
+         ('per_switch1', '80', DEFAULT),
+         ('per_switch2', '81', DEFAULT),
+         ('per_switch3', '82', DEFAULT),
+         ('per_switch4', '83', DEFAULT),
+         ('per_switch5', '84', DEFAULT),
+         ('per_switch6', '85', DEFAULT),
+         ('per_switch7', '86', DEFAULT),
+         ('per_switch8', '87', DEFAULT);
 
-INSERT INTO habitaciones (nombre, icono)
-  VALUES ('Salón', 'salon'),
-         ('C Ordenador', 'ordenador'),
-         ('Dormitorio matr.', 'dormitorio1'),
-         ('Bano matr.', 'bano'),
-         ('Dormitorio der.', 'dormitorio2'),
-         ('Dormitorio izq.', 'dormitorio3'),
-         ('Patio', 'patio');
+INSERT INTO habitaciones (codigo, nombre, icono, tipo)
+  VALUES ('10', 'Salón', 'salon', 'P2'),
+         ('11', 'C Ordenador', 'ordenador', 'P2'),
+         ('12', 'Dormitorio matr.', 'dormitorio1', 'P2'),
+         ('13', 'Baño matr.', 'bano', 'P2'),
+         ('14', 'Dormitorio der.', 'dormitorio2', 'P2'),
+         ('15', 'Dormitorio izq.', 'dormitorio3', 'P2'),
+         ('16', 'Patio', 'patio', 'R8');
 
-INSERT INTO persianas (codigo, habitacion_id, posicion1, posicion2, posicion3, posicion4)
-VALUES ('0x14', 1, 6, 14, 20, 28),
-       ('0x15', 2, 4, 11, 14, 18),
-       ('0x16', 3, 9, 20, 28, 35),
-       ('0x17', 4, 5, 12, 18, 22),
-       ('0x18', 5, 7, 12, 19, 27),
-       ('0x19', 6, 10, 18, 28, 37);
+INSERT INTO persianas (habitacion_id, posicion1, posicion2, posicion3, posicion4)
+VALUES (1, 6, 14, 20, 28),
+       (2, 4, 11, 14, 18),
+       (3, 9, 20, 28, 35),
+       (4, 5, 12, 18, 22),
+       (5, 7, 12, 19, 27),
+       (6, 10, 18, 28, 37);
 
-INSERT INTO actuadores (nombre, codigo, tipo, switch, icono, habitacion_id)
-VALUES ('Lamparita', '0x14', 'I', 'per_switch1', 'lamparita', 1);
+INSERT INTO actuadores (nombre, tipo, switch, icono, habitacion_id)
+VALUES ('Lamparita', 'I', 1, 'lamp', 1),
+       ('Lampara', 'I', 1, 'lamparita', 2);
 
 INSERT INTO sensores (pin, nombre)
   VALUES (5, 'salón'),

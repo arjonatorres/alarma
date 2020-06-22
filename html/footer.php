@@ -4,9 +4,11 @@
                 <button id="icono-estado-alarma" disabled type="button" class="btn <?= $salida == '1'? $boton: 'btn-success' ?> btn-circle">
                     <i class="fas fa-lock" style="margin-top: -8px;"></i>
                 </button>
-                <img class=menu style="width: 110px;margin-left: 160px;" src="imagenes/home.png" onClick="casa()">
+                <img class=menu style="width: 110px;" src="imagenes/home.png" onClick="casa()">
                 
-                <img class=menu style="margin-right:50px;" align="right" width="100px" src="imagenes/refresh-icon.png" onClick="refresh()">
+                <button type="button" class="btn btn-circle" style="right: 30px; position: absolute;">
+                    <i class="fas fa-user" style="margin-top: -8px;"></i>
+                </button>
             </div>
         </div>
       </div>

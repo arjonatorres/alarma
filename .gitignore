@@ -1,9 +1,15 @@
 # Passwords
 /home/pws.py
+/bear_home/py_scripts/pws.py
+/bear_home/py_scripts/*.pyc
+/bear_home/py_scripts/test*
 
 # Insertar usuarios BD
 /home/usuariosinsert.sql
+/bd/usuariosinsert.sql
 
+/home
+/web
+/html/imagenes/iconos
+/html/imagenes/old
 .idea/
-/home/copia*.sql
-/home/log*.txt
