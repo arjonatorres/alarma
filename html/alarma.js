@@ -75,21 +75,6 @@ $('#button-alarm').on('click', function() {
     });
 });
 
-function cambiar() {
-    boton = $('#button-alarm, #icono-estado-alarma');
-    all = $('input').length == $('input:checked').length;
-    if (boton.hasClass('btn-success')) {
-        boton.removeClass('btn-success');
-        clase = 'btn-' + (all? 'danger': 'warning');
-        boton.addClass(clase);
-        $('#button-alarm').data('estado', 1);
-    } else {
-        boton.removeClass('btn-danger');
-        boton.removeClass('btn-warning');
-        boton.addClass('btn-success');
-        $('#button-alarm').data('estado', 0);
-    }
-}
 
 $('.card-collapse > .card-header > .btn-chevron').on('click', function() {
     desplegar($(this));

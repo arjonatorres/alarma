@@ -93,7 +93,9 @@ CREATE TABLE rfid
 -- Insertamos algunos valores
 INSERT INTO parametros (nombre, valor, adicional)
   VALUES ('estado_alarma', '0', DEFAULT),
-         ('per_central', '0A', DEFAULT),
+         ('per_normal', '0A', DEFAULT),
+         ('per_subiendo', '0B', DEFAULT),
+         ('per_bajando', '0C', DEFAULT),
          ('per_all', '60 10 11 12 13 14 15', DEFAULT),
          ('per_pbaja', '61 10 11', 'planta baja'),
          ('per_palta', '62 12 13 14 15', 'planta alta'),
@@ -101,15 +103,16 @@ INSERT INTO parametros (nombre, valor, adicional)
          ('per_osur', '64 10 12 13', 'sur'),
          ('per_paonorte', '65 14 15', 'planta alta norte'),
          ('per_paosur', '66 12 13', 'planta alta sur'),
-         ('per_bajar', '70', 'subiendo'),
+         ('per_bajar', '70', 'bajando'),
          ('per_pos1', '71', 'posicion 1'),
          ('per_pos2', '72', 'posicion 2'),
          ('per_pos3', '73', 'posicion 3'),
-         ('per_subir', '74', 'bajando'),
+         ('per_subir', '74', 'subiendo'),
          ('per_grabar', '75', 'grabar'),
          ('per_solicitar', '76', 'solicitar'),
          ('per_solicitar_eeprom', '77', 'solicitar eeprom'),
          ('per_parar', '78', 'parar'),
+         ('per_pulsador', '79', 'pulsador'),
          ('per_switch1', '80', DEFAULT),
          ('per_switch2', '81', DEFAULT),
          ('per_switch3', '82', DEFAULT),
@@ -121,11 +124,11 @@ INSERT INTO parametros (nombre, valor, adicional)
 
 INSERT INTO habitaciones (codigo, nombre, icono, tipo)
   VALUES ('10', 'Salón', 'salon', 'P2'),
-         ('11', 'C Ordenador', 'ordenador', 'P2'),
-         ('12', 'Dormitorio matr.', 'dormitorio1', 'P2'),
-         ('13', 'Baño matr.', 'bano', 'P2'),
-         ('14', 'Dormitorio der.', 'dormitorio2', 'P2'),
-         ('15', 'Dormitorio izq.', 'dormitorio3', 'P2'),
+         ('11', 'Cuarto ordenador', 'ordenador', 'P2'),
+         ('12', 'Dormitorio matrimonio', 'dormitorio1', 'P2'),
+         ('13', 'Baño matrimonio', 'bano', 'P2'),
+         ('14', 'Dormitorio derecha', 'dormitorio2', 'P2'),
+         ('15', 'Dormitorio izquierda', 'dormitorio3', 'P2'),
          ('16', 'Patio', 'patio', 'R8');
 
 INSERT INTO persianas (habitacion_id, posicion1, posicion2, posicion3, posicion4)

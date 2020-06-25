@@ -230,7 +230,7 @@ function getCodigosPersianas($pdo)
     $params = $sent->fetchAll();
     $codigos = [];
     foreach ($params as $param) {
-        $codigos[$param[0]] = $param[1];
+        $codigos[$param[0]] = ['valor' => $param[1], 'adicional' => $param[2]];
     }
 
     return $codigos;

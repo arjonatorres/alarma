@@ -11,31 +11,31 @@ cadena_envio = codigo + orden
 ser = serial.Serial('/dev/ttyUSB0',9600,bytesize=8,parity='N',stopbits=1,timeout=0.5)
 
 def enviarArduino(cadena_envio):
-	time.sleep(0.05)
+	##time.sleep(0.05)
 	#ser.setRTS(True)
-	time.sleep(0.03)
+	##time.sleep(0.03)
 	ser.write(cadena_envio)
-	time.sleep(0.03)
-	#ser.flushInput()
+	##time.sleep(0.03)
+	ser.flush()
 	#ser.setRTS(False)
 
-def recibirArduino(cadena_envio):
-	time.sleep(0.05)
+def recibirArduino(cadena_envio, num_bytes):
+	##time.sleep(0.05)
 	#ser.setRTS(True)
-	time.sleep(0.03)
+	##time.sleep(0.03)
 	ser.write(cadena_envio)
-	time.sleep(0.03)
-	#ser.flushInput()
+	##time.sleep(0.03)
+	ser.flush()
 	#ser.setRTS(False)
-	state=ser.read(5)
+	state=ser.read(num_bytes)
 	#time.sleep(0.03)
 	print state.encode('hex')
 
 if (tipo_envio == 'enviar'):
-	tipo_act = sys.argv[4]
 	enviarArduino(cadena_envio)
 elif (tipo_envio == 'recibir'):
-	recibirArduino(cadena_envio)
+	num_bytes = int(sys.argv[4])
+	recibirArduino(cadena_envio, num_bytes)
 #state=ser.read(4)
 #time.sleep(0.03)
 #print state.encode('hex')

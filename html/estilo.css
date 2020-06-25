@@ -151,10 +151,6 @@ button.boton {
 	margin-left: 20px;
 }
 
-.card-elem > .card-header {
-	/*display:flex;*/
-}
-
 .card-elem .switch-slider {
 	position: absolute;
 	right: 20px;
@@ -262,7 +258,7 @@ div.pos-persiana > p {
 	opacity: 1;
 }
 
-#button-alarm.btn-warning, #icono-estado-alarma.btn-warning {
+#button-alarm.btn-warning, #icono-estado-alarma.btn-warning, #button-alarm-modal.btn-warning {
 	color: white;
 }
 
@@ -275,10 +271,87 @@ div.pos-persiana > p {
 	border-color: #adb5bd;
 }
 
+.card-footer button > i {
+	margin-top: -8px;
+}
+
+/* Modals */
+
+#alertModal > div.modal-dialog {
+	max-width: 80%;
+}
+
+#alertModal div.modal-content {
+	color: #545b62;
+}
+
+#alertModal div.modal-header {
+	background-color: #17a2b8;
+	color: white;
+}
+
+#alertModal div.modal-footer > button {
+	font-size: 40px;
+	margin: 25px;
+	padding: 10px 20px;
+}
+
+#alertModalTitle {
+	font-size: 50px;
+	margin: 20px 30px;
+}
+
+#alertModalContent, #alarmModalContent {
+	font-size: 35px;
+	margin: 30px;
+}
+
+#alarmModal div.modal-content {
+	color: #545b62;
+	background-color:
+	transparent!important; border: 0px;
+}
+
+#button-alarm-modal > i {
+	margin-top: -30px;
+}
+
+.btn-per-inst .btn-outline-light:hover {
+    color: #f8f9fa;
+    background-color: transparent;
+}
+
+.btn-per-inst .btn-outline-light.focus, .btn-outline-light:focus {
+    box-shadow: 0 0 0 0.0rem transparent;
+}
+
+.btn-per-pos .btn-outline-light:hover {
+    color: #f8f9fa;
+    background-color: transparent;
+}
+
+.btn-per-pos .btn-por > img {
+    width: 80px;
+    height: 80px;
+    margin-top: 0px;
+}
+
+.btn-per-pos .btn-por {
+    width: 128px;
+    height: 128px;
+    padding: 0px;
+    border-radius: 64px;
+    font-size: 60px;
+    line-height: 1;
+    border: 2px solid white!important;
+}
 
 
-
-
+.btn-per-pos {
+	margin: 20px -15px 8px -15px;
+	border-top: 2px solid #666;
+	padding-top: 20px;
+}
 
 
 
