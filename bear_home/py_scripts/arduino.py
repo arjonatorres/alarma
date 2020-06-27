@@ -1,6 +1,6 @@
 # encoding: utf-8
+from BearFunctions import *
 import serial
-import time
 import sys
 
 tipo_envio = sys.argv[1]
@@ -10,32 +10,14 @@ cadena_envio = codigo + orden
 
 ser = serial.Serial('/dev/ttyUSB0',9600,bytesize=8,parity='N',stopbits=1,timeout=0.5)
 
-def enviarArduino(cadena_envio):
-	##time.sleep(0.05)
-	#ser.setRTS(True)
-	##time.sleep(0.03)
-	ser.write(cadena_envio)
-	##time.sleep(0.03)
-	ser.flush()
-	#ser.setRTS(False)
-
-def recibirArduino(cadena_envio, num_bytes):
-	##time.sleep(0.05)
-	#ser.setRTS(True)
-	##time.sleep(0.03)
-	ser.write(cadena_envio)
-	##time.sleep(0.03)
-	ser.flush()
-	#ser.setRTS(False)
-	state=ser.read(num_bytes)
-	#time.sleep(0.03)
-	print state.encode('hex')
 
 if (tipo_envio == 'enviar'):
-	enviarArduino(cadena_envio)
+	enviarArduino(ser, cadena_envio)
 elif (tipo_envio == 'recibir'):
 	num_bytes = int(sys.argv[4])
-	recibirArduino(cadena_envio, num_bytes)
+	estado = recibirArduino(ser, cadena_envio, num_bytes)
+	print estado
+
 #state=ser.read(4)
 #time.sleep(0.03)
 #print state.encode('hex')

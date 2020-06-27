@@ -51,7 +51,7 @@ $(document).ready(function() {
 });
 
 function desplegar(objeto) {
-    icono = objeto.find('i');
+    let icono = objeto.find('i');
     if (icono.hasClass('fa-chevron-right')) {
         icono.removeClass('fa-chevron-right');
         icono.addClass('fa-chevron-down');

@@ -128,3 +128,24 @@ def escribirEstadoAlarma(ne):
 	cur.execute(sql, (ne,))
 	db.commit()
 	db.close()
+
+def enviarArduino(ser, cadena_envio):
+	##time.sleep(0.05)
+	#ser.setRTS(True)
+	##time.sleep(0.03)
+	ser.write(cadena_envio)
+	##time.sleep(0.03)
+	ser.flush()
+	#ser.setRTS(False)
+
+def recibirArduino(ser, cadena_envio, num_bytes):
+	##time.sleep(0.05)
+	#ser.setRTS(True)
+	##time.sleep(0.03)
+	ser.write(cadena_envio)
+	##time.sleep(0.03)
+	ser.flush()
+	#ser.setRTS(False)
+	state=ser.read(num_bytes)
+	#time.sleep(0.03)
+	return state.encode('hex')

@@ -182,4 +182,4 @@ $ordenIcono = [
     rooms = <?= json_encode($rooms) ?>;
     codigosPersianas = <?= json_encode($codigosPersianas); ?>
 </script>
-<script src="rooms.js?r=20200620" charset="utf-8"></script>
+<script src="rooms.js?r=20200626" charset="utf-8"></script>

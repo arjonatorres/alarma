@@ -96,7 +96,7 @@ INSERT INTO parametros (nombre, valor, adicional)
          ('per_normal', '0A', DEFAULT),
          ('per_subiendo', '0B', DEFAULT),
          ('per_bajando', '0C', DEFAULT),
-         ('per_all', '60 10 11 12 13 14 15', DEFAULT),
+         ('per_all', '60 10 11 12 13 14 15', 'todas'),
          ('per_pbaja', '61 10 11', 'planta baja'),
          ('per_palta', '62 12 13 14 15', 'planta alta'),
          ('per_onorte', '63 11 14 15', 'norte'),

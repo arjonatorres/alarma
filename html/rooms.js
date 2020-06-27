@@ -1,5 +1,6 @@
 var ready = false;
 var evento = [];
+const MULTIP = 1000;
 
 rooms.forEach(function (item, index) {
 	evento[item['codigo']] = undefined
@@ -109,7 +110,7 @@ function valoresPersiana(perelem, objeto_pulsado, codigo, estado, altura, pos4) 
 	    		posicion_final = parseInt(perelem.data('pos4'));
 				evento[codigo] = setTimeout(function() {
         			recibirDatos(objeto_pulsado);
-        		}, ((posicion_final-altura)+1)*1000);
+        		}, ((posicion_final-altura)+1)*MULTIP);
 			}
 			objeto_pulsado.closest('.info-data').find('.card-elem .btn-per:not(.btn-stop), .card-elem .btn-por').attr('disabled', true);
 	    	break;
@@ -119,7 +120,7 @@ function valoresPersiana(perelem, objeto_pulsado, codigo, estado, altura, pos4) 
     		if (typeof evento[codigo] === 'undefined') {
 				evento[codigo] = setTimeout(function() {
         			recibirDatos(objeto_pulsado);
-        		}, ((altura)+1)*1000);
+        		}, ((altura)+1)*MULTIP);
 			}
 			objeto_pulsado.closest('.info-data').find('.card-elem .btn-per:not(.btn-stop), .card-elem .btn-por').attr('disabled', true);
     		break;
@@ -190,13 +191,13 @@ $('.card-elem .btn-per, .card-elem .btn-por').on('click', function() {
             		boton.closest('.card-header').find('.icon-per').attr('src', 'imagenes/persianas/subiendo.gif');
             		evento[codigo] = setTimeout(function() {
             			recibirDatos(boton);
-            		}, ((posicion_final-posicion_actual)+1)*1000);
+            		}, ((posicion_final-posicion_actual)+1)*MULTIP);
             	} else if (codigosPersianas['per_bajar']['valor'] == orden) {
             		textoPer = 'Bajando';
             		boton.closest('.card-header').find('.icon-per').attr('src', 'imagenes/persianas/bajando.gif');
             		evento[codigo] = setTimeout(function() {
             			recibirDatos(boton);
-            		}, (posicion_actual+1)*1000);
+            		}, (posicion_actual+1)*MULTIP);
             	} else if (codigosPersianas['per_parar']['valor'] == orden) {
             		boton.closest('.info-data').find('.card-elem .btn-per:not(.btn-stop), .card-elem .btn-por').attr('disabled', false);
             		if (typeof evento[codigo] !== 'undefined') {
@@ -211,13 +212,13 @@ $('.card-elem .btn-per, .card-elem .btn-por').on('click', function() {
 	            		boton.closest('.card-header').find('.icon-per').attr('src', 'imagenes/persianas/subiendo.gif');
 	            		evento[codigo] = setTimeout(function() {
 	            			recibirDatos(boton);
-	            		}, ((posicion_final-posicion_actual)+1)*1000);
+	            		}, ((posicion_final-posicion_actual)+1)*MULTIP);
             		} else if (posicion_final < posicion_actual) {
 	            		textoPer = 'Bajando';
 	            		boton.closest('.card-header').find('.icon-per').attr('src', 'imagenes/persianas/bajando.gif');
 	            		evento[codigo] = setTimeout(function() {
 	            			recibirDatos(boton);
-	            		}, ((posicion_actual-posicion_final)+1)*1000);
+	            		}, ((posicion_actual-posicion_final)+1)*MULTIP);
             		} else {
             			boton.closest('.info-data').find('.card-elem .btn-per:not(.btn-stop), .card-elem .btn-por').attr('disabled', false);
             		}
