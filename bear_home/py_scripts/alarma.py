@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Alarma domestica por Jose Arjona
 
-from BearFunctions import *
+from bearFunctions import *
 import RPi.GPIO as GPIO
 import serial
 import threading
@@ -11,8 +11,8 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 # Configuracion serial
-sim900 = serial.Serial('/dev/ttyAMA0', baudrate=115200, timeout=4)
-#arduino = serial.Serial('/dev/ttyUSB1',9600,bytesize=8,parity='N',stopbits=1,timeout=4)
+#sim900 = serial.Serial('/dev/ttyAMA0', baudrate=115200, timeout=4)
+arduino = serial.Serial('/dev/ttyUSB1',9600,bytesize=8,parity='N',stopbits=1,timeout=4)
 
 # Pines
 corriente = 17 # Sensor de corriente
@@ -78,7 +78,7 @@ def rfid():
 				estadot = '1'
 
 		elif ((str(state.encode('hex'))) != '000d0a' and (str(state.encode('hex'))) != '001d0a' and (str(state.encode('hex'))) != ''):
-			# todo avisar de que un usuario está intentando entrar
+			enviar("RFID no registrado. Código: " + code)
 			for x in range(6):
 				GPIO.output(buzz,True)
 				time.sleep(0.08)
@@ -247,16 +247,17 @@ def sensor220v():
 
 # Cuerpo principal
 
-#enviar("Alarma reiniciada", True, 'hangouts')
-print "alarma iniciada"
+enviar("BeAr Control reiniciado")
+#print "alarma iniciada"
 GPIO.output(estado_alarma_flag,False)
 GPIO.output(sensores_flag,False)
 estadot = leerEstadoAlarma()
-#time.sleep(2)
+time.sleep(3)
 
 xcorriente = 0
-#r = threading.Thread(target=rfid)
-#r.start()
+r = threading.Thread(target=rfid)
+r.daemon = True
+r.start()
 
 sensores=initSensores()
 
@@ -274,21 +275,16 @@ while True:
 			buzzoff()
 			print("Alarma desconectada via movil")
 			time.sleep(0.1)
-			#estadot = leerEstadoAlarma()
 		elif (estadot == '1'):
 			GPIO.output(buzz,True)
 			time.sleep(1)
 			GPIO.output(buzz,False)
 			print("Alarma conectada via movil")
-			#estadot = leerEstadoAlarma()
-		elif (estadot == '2'):
-			GPIO.output(buzz,True)
-			time.sleep(1)
-			GPIO.output(buzz,False)
-			print("Alarma parcial conectada via movil")
-			#estadot = leerEstadoAlarma()
 
-	for pin, nombre in sensores.items():
-		if (estadot == '1' and GPIO.input(pin)):
-			tripleComprobacion(pin, nombre)
-	#sensor220v()
+
+	if (estadot == '1'):
+		for pin, nombre in sensores.items():
+			if (GPIO.input(pin)):
+				tripleComprobacion(pin, nombre)
+	
+	sensor220v()

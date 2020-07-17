@@ -1,5 +1,5 @@
 # encoding: utf-8
-from BearFunctions import *
+from bearFunctions import *
 import serial
 import sys
 
@@ -10,9 +10,9 @@ pos = sys.argv[4]
 orden_solicitar = sys.argv[5].decode("hex")
 cadena_envio = codigo + orden
 
-if (pos == 'bajando'):
+if (pos == 'bajar'):
 	pos = '0'
-elif (pos == 'subiendo'):
+elif (pos == 'subir'):
 	pos = 'p.posicion4'
 elif (pos == 'parar'):
 	pos = pos
@@ -80,6 +80,7 @@ def enviarPosicionFinal(arrayPersianas):
 enviarArduino(ser, cadena_envio)
 
 if (pos == 'parar'):
+	time.sleep(0.3)
 	enviarPosicionFinal({})
 else:
 	arrayPersianas, alturaMax = getPersianas(pos, pers)
@@ -103,7 +104,6 @@ else:
 			arrayPersianas[persiana]['posFinal'] = str((int(alturaHex,16)*100)/int(arrayPersianas[persiana]['posicion4'])) + ' %'
 			if (int(alturaHex,16) == arrayPersianas[persiana]['posicion']):
 				contador += 1
-			
 		if (contador == len(arrayPersianas) or i == (intentos-1)):
 			break
 		enviar('Reintentando...', False)

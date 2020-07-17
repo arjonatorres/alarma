@@ -11,13 +11,16 @@ $(document).ready(function() {
         if ($(location).attr('pathname') == '/alarma.php') {
             return;
         }
+        vibrar();
         $('#alarmModal').modal('show');
     });
 
     $('#button-alarm-modal').on('click', function() {
         vibrar();
+        $('#button-alarm-modal').css({'box-shadow': ''});
+        $('#button-alarm-modal').css({'background-color': ''});
+        $('.loader').fadeIn('fast');
         estado = $(this).data('estado') == '0'? '1': '0';
-        console.log(estado);
         if (clase_boton == 'btn-warning' && estado != '0') {
             estado = '2';
         }
@@ -45,12 +48,15 @@ $(document).ready(function() {
             },
             error: function(e) {
                 ajaxError(e);
+            },
+            complete: function(e) {
+                $('.loader').fadeOut('fast');
             }
         });
     });
 });
 
-function desplegar(objeto) {
+function desplegar(objeto, selfObj = false) {
     let icono = objeto.find('i');
     if (icono.hasClass('fa-chevron-right')) {
         icono.removeClass('fa-chevron-right');
@@ -59,7 +65,12 @@ function desplegar(objeto) {
         icono.removeClass('fa-chevron-down');
         icono.addClass('fa-chevron-right');
     }
-    objeto.parent().next().slideToggle();
+    if (selfObj) {
+        objeto.next().slideToggle();
+    } else {
+        objeto.parent().next().slideToggle();
+    }
+    
 }
 
 function refresh() {

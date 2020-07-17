@@ -3,6 +3,40 @@
 //    $imagen = 'home';
 include ('header.php');
 $tempActual = tempActual($pdo);
+$iconos = [
+    [
+        'href' => 'persianas',
+        'title' => 'Persianas'
+    ],
+    [
+        'href' => 'rooms',
+        'title' => 'Habitaciones'
+    ],
+    [
+        'href' => 'alarma',
+        'title' => 'Alarma'
+    ],
+    [
+        'href' => 'placas',
+        'title' => 'Placas solares'
+    ],
+    [
+        'href' => 'sensores',
+        'title' => 'Sensores'
+    ],
+    [
+        'href' => 'config',
+        'title' => 'Configuración'
+    ],
+    [
+        'href' => 'logs',
+        'title' => 'Logs'
+    ],
+    [
+        'href' => 'eventos',
+        'title' => 'Eventos'
+    ]
+];
 ?>
 <div class="card text-white bg-dark card-info">
     <div class="card-header">
@@ -12,38 +46,13 @@ $tempActual = tempActual($pdo);
 
 <div class="container-fluid">
     <div class="row boton-row">
-        <div class="col-sm">
-            <button type="button" data-href="persianas" class="btn btn-dark boton go">
-                <img class=boton src="imagenes/persianas.png"><br>Persianas
-            </button>
-        </div>
-        <div class="col-sm">
-            <button type="button" data-href="rooms" class="btn btn-dark boton go">
-                <img class=boton src="imagenes/rooms.png"><br>Habitaciones
-            </button>
-        </div>
-        <div class="col-sm">
-            <button type="button" data-href="alarma" class="btn btn-dark boton go">
-                <img class=boton src="imagenes/thief-icon.png"><br>Alarma
-            </button>
-        </div>
-    </div>
-    <div class="row boton-row">
-        <div class="col-sm">
-            <button type="button" data-href="placas" class="btn btn-dark boton go">
-                <img class=boton src="imagenes/solar-panel-icon2.png"><br>Placas solares
-            </button>
-        </div>
-        <div class="col-sm">
-            <button type="button" data-href="sensores" class="btn btn-dark boton go">
-                <img class=boton src="imagenes/sensor.png"><br>Sensores
-            </button>
-        </div>
-        <div class="col-sm">
-            <button type="button" data-href="config" class="btn btn-dark boton go">
-                <img class=boton src="imagenes/config-icon.png"><br>Configuración
-            </button>
-        </div>
+        <?php foreach ($iconos as $icono) { ?>
+            <div class="col-4 text-center col-md-2">
+                <button type="button" data-href="<?= $icono['href'] ?>" class="btn btn-dark boton go">
+                    <img class=boton src="imagenes/<?= $icono['href'] ?>.png?r=2"><p class="btn-title"><?= $icono['title'] ?></p>
+                </button>
+            </div>
+        <?php } ?>
     </div>
 </div>
 

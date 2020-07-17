@@ -1,4 +1,4 @@
-from BearFunctions import *
+from bearFunctions import *
 import sys
 
 mensaje = sys.argv[1]

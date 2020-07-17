@@ -59,8 +59,8 @@ CREATE TABLE persianas
   CONSTRAINT fk_per_hab_id         FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id)
 );
 
-DROP TABLE IF EXISTS actuadores CASCADE;
-CREATE TABLE actuadores
+DROP TABLE IF EXISTS dispositivos CASCADE;
+CREATE TABLE dispositivos
 (
   id            SERIAL             PRIMARY KEY,
   nombre        VARCHAR(255),
@@ -88,6 +88,19 @@ CREATE TABLE rfid
   CONSTRAINT fk_rfid_usu_id       FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
+DROP TABLE IF EXISTS horarios CASCADE;
+CREATE TABLE horarios
+(
+  id      SERIAL       PRIMARY KEY,
+  codigo  VARCHAR(2),
+  orden   VARCHAR(10),
+  repetir BOOLEAN,
+  dias    VARCHAR(20),
+  tipo    VARCHAR(10),
+  hora    TIME(0),
+  activo  BOOLEAN
+);
+
 
 
 -- Insertamos algunos valores
@@ -103,24 +116,27 @@ INSERT INTO parametros (nombre, valor, adicional)
          ('per_osur', '64 10 12 13', 'sur'),
          ('per_paonorte', '65 14 15', 'planta alta norte'),
          ('per_paosur', '66 12 13', 'planta alta sur'),
-         ('per_bajar', '70', 'bajando'),
+         ('per_bajar', '70', 'bajar'),
          ('per_pos1', '71', 'posicion 1'),
          ('per_pos2', '72', 'posicion 2'),
          ('per_pos3', '73', 'posicion 3'),
-         ('per_subir', '74', 'subiendo'),
+         ('per_subir', '74', 'subir'),
          ('per_grabar', '75', 'grabar'),
          ('per_solicitar', '76', 'solicitar'),
          ('per_solicitar_eeprom', '77', 'solicitar eeprom'),
          ('per_parar', '78', 'parar'),
-         ('per_pulsador', '79', 'pulsador'),
-         ('per_switch1', '80', DEFAULT),
-         ('per_switch2', '81', DEFAULT),
-         ('per_switch3', '82', DEFAULT),
-         ('per_switch4', '83', DEFAULT),
-         ('per_switch5', '84', DEFAULT),
-         ('per_switch6', '85', DEFAULT),
-         ('per_switch7', '86', DEFAULT),
-         ('per_switch8', '87', DEFAULT);
+         ('per_switch_pulsador', '79', 'pulsador'),
+         ('per_encender', '7A', 'encender'),
+         ('per_apagar', '7B', 'apagar'),
+         ('per_switch_all', '80', DEFAULT),
+         ('per_switch1', '81', DEFAULT),
+         ('per_switch2', '82', DEFAULT),
+         ('per_switch3', '83', DEFAULT),
+         ('per_switch4', '84', DEFAULT),
+         ('per_switch5', '85', DEFAULT),
+         ('per_switch6', '86', DEFAULT),
+         ('per_switch7', '87', DEFAULT),
+         ('per_switch8', '88', DEFAULT);
 
 INSERT INTO habitaciones (codigo, nombre, icono, tipo)
   VALUES ('10', 'Salón', 'salon', 'P2'),
@@ -139,7 +155,7 @@ VALUES (1, 6, 14, 20, 28),
        (5, 7, 12, 19, 27),
        (6, 10, 18, 28, 37);
 
-INSERT INTO actuadores (nombre, tipo, switch, icono, habitacion_id)
+INSERT INTO dispositivos (nombre, tipo, switch, icono, habitacion_id)
 VALUES ('Lamparita', 'I', 1, 'lamp', 1),
        ('Lampara', 'I', 1, 'lamparita', 2);
 
@@ -152,3 +168,7 @@ INSERT INTO sensores (pin, nombre)
 INSERT INTO rfid (usuario_id, code)
   VALUES (1, 'a16c1624ff0d0a'),
          (2, '1133e42bed0d0a');
+
+-- tipo: hora(hora normal), alba+-(amanecer), ocaso+-(anochecer)
+INSERT INTO horarios (codigo, orden, repetir, dias, tipo, hora, activo)
+  VALUES ('15', '7A81', true, '0,1,2,3,4,5,6', 'hora', '15:00:00', true);

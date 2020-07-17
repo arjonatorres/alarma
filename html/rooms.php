@@ -10,7 +10,7 @@ if (!empty($_POST)) {
     $username = ucwords($_SESSION['usuario']['usuario']);
     $codigosPersianas = getCodigosPersianas($pdo);
     $rooms = getHabitaciones($pdo);
-    $actuadores = getActuadores($pdo);
+    $dispositivos = getDispositivos($pdo);
 
     if (isset($_POST['tipo_envio'])) {
         $tipo_envio = $_POST['tipo_envio'];
@@ -20,7 +20,13 @@ if (!empty($_POST)) {
 
         switch ($tipo_envio) {
             case 'enviar':
-                exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden", $output, $retVar);
+                if (isset($_POST['switch_v'])) {
+                    $switch_v = $_POST['switch_v'];
+                    exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden $switch_v", $output, $retVar);
+                } else {
+                    exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden", $output, $retVar);
+                }
+                
                 if ($retVar == 0) {
                     $jsondata["success"] = true;
                     // Logs
@@ -34,21 +40,28 @@ if (!empty($_POST)) {
                             break;
                         }
                     }
+                    if (isset($_POST['switch_v'])) {
+                        $numSwitch = '';
+                        foreach ($codigosPersianas as $key => $codigosPersiana) {
+                            if ($codigosPersiana['valor'] == $switch_v) {
+                                $numSwitch = substr($key, 10);
+                            }
+                        }
+                    }
+
                     $adicional = '';
                     foreach ($codigosPersianas as $key => $codigosPersiana) {
                         if ($codigosPersiana['valor'] == $orden) {
-                            if (strpos($key, 'switch') == true) {
-                                foreach ($actuadores[$idHabitacion] as $actuador) {
-                                    $numSwitch = substr($key, 10);
-                                    if ($actuador['switch'] == $numSwitch) {
-                                        $nombreActuador = $actuador['nombre'];
+                            if (isset($_POST['switch_v'])) {
+                                foreach ($dispositivos[$idHabitacion] as $dispositivo) {
+                                    if ($dispositivo['switch'] == $numSwitch) {
+                                        $nombreDispositivo = $dispositivo['nombre'];
                                     }
                                 }
-                                $adicional = $nombreActuador . ' ';
+                                $adicional = ucfirst($codigosPersiana['adicional']) . ' ' . $nombreDispositivo . ' ';
                             } else {
                                 $adicional = ucfirst($codigosPersiana['adicional']) . ' persiana ';
                             }
-                            
                             break;
                         }
                     }
@@ -94,7 +107,7 @@ include ('header.php');
 $rooms = getHabitaciones($pdo);
 $codigosPersianas = getCodigosPersianas($pdo);
 $persianas = getPersianas($pdo);
-$actuadores = getActuadores($pdo);
+$dispositivos = getDispositivos($pdo);
 
 $ordenIcono = [
     'per_bajar' => '0',
@@ -105,73 +118,84 @@ $ordenIcono = [
 ];
 ?>
 
-<?php foreach ($rooms as $room) { ?>
-<div class="card text-white bg-dark card-collapse info-data" data-codigo="<?= $room['codigo'] ?>" data-tipohab="<?= $room['tipo'] ?>">
-    <div class="card-header">
-        <img src="imagenes/habitaciones/<?= $room['icono'] ?>.png"> <?= $room['nombre'] ?>
-        <button type="button" class="btn btn-dark btn-chevron">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    </div>
-    <div class="card-body" style="display: none;">
-        <?php foreach ($persianas[$room['id']] as $blind) { ?>
-            <div class="card text-white bg-dark card-elem card-elem-per" style="display:block" data-pos="0" data-pos1="<?= $blind['posicion1'] ?>" data-pos2="<?= $blind['posicion2'] ?>" data-pos3="<?= $blind['posicion3'] ?>" data-pos4="<?= $blind['posicion4'] ?>">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-6">
-                            <img class="icon-per" src="imagenes/persianas.png">
-                            <div class="pos-persiana">
-                                <p>Persiana</p>
-                                <p style="font-size: 35px;margin-top: -20px;"><span class="altura-per">33</span></p>
-                            </div>
-                        </div>
-                        <div class="col-6 text-right btn-per-inst">
-                            <button type="button" class="btn btn-outline-light btn-per btn-circle btn-stop" data-orden="<?= $codigosPersianas['per_parar']['valor'] ?>" data-tipo="B">
-                                <i style="color:#dc3545" class="far fa-stop-circle"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-light btn-per btn-circle" data-orden="<?= $codigosPersianas['per_bajar']['valor'] ?>" data-tipo="B">
-                                <i class="fas fa-arrow-circle-down"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-light btn-per btn-circle" data-orden="<?= $codigosPersianas['per_subir']['valor'] ?>" data-tipo="B">
-                                <i class="fas fa-arrow-circle-up"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row text-center btn-per-pos">
-                        <?php $i = 0; ?>
-                        <?php foreach ($ordenIcono as $key => $icon) { ?>
-                            <div class="col">
-                                <button type="button" class="btn btn-outline-light btn-circle btn-por" data-pos="<?= $blind['posicion'.($i)]?: '0' ?>" data-orden="<?= $codigosPersianas[$key]['valor'] ?>" data-tipo="B"><img src="imagenes/persianas/p<?= $icon ?>.png"></button>
 
-                            </div>
-                            <?php $i++; ?>
-                        <?php } ?>
-                    </div>
-                </div>
+<?php foreach ($rooms as $room) { ?>
+<div class="row justify-content-center no-margin">
+    <div class="col-md-6 no-padding">
+        <div class="card text-white bg-dark card-collapse info-data" data-codigo="<?= $room['codigo'] ?>" data-tipohab="<?= $room['tipo'] ?>">
+            <div class="card-header">
+                <img src="imagenes/habitaciones/<?= $room['icono'] ?>.png"> <?= $room['nombre'] ?>
+                <button type="button" class="btn btn-dark btn-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
-        <?php } ?>
-        <?php foreach ($actuadores[$room['id']] as $action) { ?>
-            <?php
-                if ($action['tipo'] == 'P') {
-                    $orden = $codigosPersianas['per_pulsador']['valor'];
-                    // todo Mostrar otro tipo de botón para los de tipo Pulsador
-                } else {
-                    $orden = $codigosPersianas['per_switch'.$action['switch']]['valor'];
-                }
-            ?>
-            <div class="card text-white bg-dark card-elem card-elem-act">
-                <div class="card-header">
-                    <img src="imagenes/actuadores/<?= $action['icono'] ?>.png?r=10">
-                    <p><?= $action['nombre'] ?></p>
-                    <div class="switch-slider">
-                        <div class="custom-control custom-switch custom-switch-xl">
-                            <input type="checkbox" class="custom-control-input actuador-input" id="customSwitch<?= $action['id'] ?>" data-orden="<?= $orden ?>" data-tipo="<?= $action['tipo'] ?>">
-                            <label class="custom-control-label" for="customSwitch<?= $action['id'] ?>"></label>
+            <div class="card-body" style="display: none;">
+                <?php foreach ($persianas[$room['id']] as $blind) { ?>
+                    <div class="card text-white bg-dark card-elem card-elem-per" style="display:block" data-pos="0" data-pos1="<?= $blind['posicion1'] ?>" data-pos2="<?= $blind['posicion2'] ?>" data-pos3="<?= $blind['posicion3'] ?>" data-pos4="<?= $blind['posicion4'] ?>">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img class="icon-per" src="imagenes/persianas.png">
+                                    <div class="pos-persiana">
+                                        <p>Persiana</p>
+                                        <p style="font-size: 12px;margin-top: -18px;"><span class="altura-per">33</span></p>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-right btn-per-inst">
+                                    <button type="button" class="btn btn-outline-light btn-per btn-circle btn-stop" data-orden="<?= $codigosPersianas['per_parar']['valor'] ?>" data-tipo="B">
+                                        <i style="color:#dc3545" class="far fa-stop-circle"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-light btn-per btn-circle" data-orden="<?= $codigosPersianas['per_bajar']['valor'] ?>" data-tipo="B">
+                                        <i class="fas fa-arrow-circle-down"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-light btn-per btn-circle" data-orden="<?= $codigosPersianas['per_subir']['valor'] ?>" data-tipo="B">
+                                        <i class="fas fa-arrow-circle-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row text-center btn-per-pos">
+                                <?php $i = 0; ?>
+                                <?php foreach ($ordenIcono as $key => $icon) { ?>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-outline-light btn-circle btn-por" data-pos="<?= $blind['posicion'.($i)]?: '0' ?>" data-orden="<?= $codigosPersianas[$key]['valor'] ?>" data-tipo="B"><img src="imagenes/persianas/p<?= $icon ?>.png"></button>
+
+                                    </div>
+                                    <?php $i++; ?>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
+                <?php foreach ($dispositivos[$room['id']] as $action) { ?>
+                    
+                    <div class="card text-white bg-dark card-elem card-elem-act">
+                        <div class="card-header">
+                            <img src="imagenes/dispositivos/<?= $action['icono'] ?>.png?r=10">
+                            <p><?= $action['nombre'] ?></p>
+                            <?php
+                            $switch_v = $codigosPersianas['per_switch'.$action['switch']]['valor'];
+                            if ($action['tipo'] == 'P') {
+                                $orden = $codigosPersianas['per_switch_pulsador']['valor']; ?>
+                                <div class="pulsador">
+                                    <button type="button" class="btn btn-outline-light btn-circle but-puls" style="right: 10px; position: absolute;border: 1px solid white!important;" data-switch_v="<?= $switch_v ?>" data-orden="<?= $orden ?>" data-tipo="<?= $action['tipo'] ?>">
+                                        <i class="fas fa-circle"></i>
+                                    </button>
+                                </div>
+                            <?php } else {
+                                $orden = ''; ?>
+                                <div class="switch-slider">
+                                    <div class="custom-control custom-switch custom-switch-xl">
+                                        <input type="checkbox" class="custom-control-input dispositivo-input" id="customSwitch<?= $action['id'] ?>" data-switch_v="<?= $switch_v ?>" data-orden="<?= $orden ?>" data-tipo="<?= $action['tipo'] ?>">
+                                        <label class="custom-control-label" for="customSwitch<?= $action['id'] ?>"></label>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
-        <?php } ?>
+        </div>
     </div>
 </div>
 <?php } ?>
@@ -182,4 +206,4 @@ $ordenIcono = [
     rooms = <?= json_encode($rooms) ?>;
     codigosPersianas = <?= json_encode($codigosPersianas); ?>
 </script>
-<script src="rooms.js?r=20200626" charset="utf-8"></script>
+<script src="rooms.js?r=20200704" charset="utf-8"></script>

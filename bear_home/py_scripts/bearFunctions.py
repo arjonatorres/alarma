@@ -139,13 +139,24 @@ def enviarArduino(ser, cadena_envio):
 	#ser.setRTS(False)
 
 def recibirArduino(ser, cadena_envio, num_bytes):
-	##time.sleep(0.05)
+	#time.sleep(0.15)
 	#ser.setRTS(True)
-	##time.sleep(0.03)
-	ser.write(cadena_envio)
-	##time.sleep(0.03)
-	ser.flush()
-	#ser.setRTS(False)
-	state=ser.read(num_bytes)
 	#time.sleep(0.03)
+	ser.write(cadena_envio)
+	time.sleep(0.03)
+	ser.flushInput()
+	ser.setRTS(False)
+	state=ser.read(num_bytes)
+
 	return state.encode('hex')
+
+def placas(temp):
+	"""Guarda un registro en la tabla de placas.
+
+	"""
+	db = conectar()
+	cur = db.cursor()
+	sql = "INSERT INTO placas (temp) VALUES (%s)"
+	cur.execute(sql, (temp,))
+	db.commit()
+	db.close()

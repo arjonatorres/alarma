@@ -46,16 +46,16 @@ function recibirDatos(objeto_pulsado) {
                 
                 if (tipo_arduino[0] == 'P') {
                     let pertemp = objeto_pulsado.closest('.info-data').find('.card-elem-per');
-                    let actuadores = objeto_pulsado.closest('.info-data').find('.card-elem-act');
+                    let dispositivos = objeto_pulsado.closest('.info-data').find('.card-elem-act');
                     let estado = datos[1];
                     let alturaPersiana = parseInt(datos[2], 16);
                     let pos1 = pertemp.data('pos1');
                     let pos2 = pertemp.data('pos2');
                     let pos3 = pertemp.data('pos3');
                     let pos4 = pertemp.data('pos4');
-                    let estados = datos.slice(3, 3 + actuadores.length);
+                    let estados = datos.slice(3, 3 + dispositivos.length);
                     valoresPersiana(pertemp, objeto_pulsado, codigo, estado, alturaPersiana, pos4);
-                    valoresActuadores(actuadores, estados);
+                    valoresDispositivos(dispositivos, estados);
                 }
                 if (objeto_pulsado.closest('.info-data').find('i').hasClass('fa-chevron-right')) {
                 	desplegar(objeto_pulsado);
@@ -77,14 +77,14 @@ function recibirDatos(objeto_pulsado) {
     });
 }
 
-function valoresActuadores(actuadores, estados) {
-    actuadores.each(function(index) {
-        let inputact = $(this).find('input');
-        inputact.prop('checked')
-        if (estados[index] == 1 && !inputact.prop('checked')) {
-            inputact.trigger('click');
-        } else if (estados[index] == 0 && inputact.prop('checked')) {
-            inputact.trigger('click');
+function valoresDispositivos(dispositivos, estados) {
+    dispositivos.each(function(index) {
+        let inputdisp = $(this).find('input');
+        // inputdisp.prop('checked');
+        if (estados[index] == 1 && !inputdisp.prop('checked')) {
+            inputdisp.trigger('click');
+        } else if (estados[index] == 0 && inputdisp.prop('checked')) {
+            inputdisp.trigger('click');
         }
     });
 }
@@ -131,7 +131,38 @@ function valoresPersiana(perelem, objeto_pulsado, codigo, estado, altura, pos4) 
     perelem.find('.icon-per').attr('src', 'imagenes/persianas/' + iconName);
 }
 
-$('input.actuador-input').on('click', function(e) {
+$('button.but-puls').on('click', function(e) {
+    $('.loader').fadeIn('fast');
+    vibrar();
+
+    let boton = $(this);
+    let codigo = $(this).closest('.info-data').data('codigo');
+    let switch_v = $(this).data('switch_v');
+    let orden = $(this).data('orden');;
+
+    $.ajax({
+        url: $(location).attr('pathname'),
+        type: 'POST',
+        data: {tipo_envio: 'enviar', codigo: codigo,switch_v: switch_v, orden: orden},
+        dataType: "json",
+        success: function(data) {
+            if (!data.success) {
+                alertPersonalizado(data.message);
+                return false;
+            }
+        },
+        error: function(e) {
+            alertPersonalizado(e.message);
+            return false;
+        },
+        complete: function(e) {
+            $('.loader').fadeOut('fast');
+        }
+    });
+   
+});
+
+$('input.dispositivo-input').on('click', function(e) {
     if (sincronizando) {
         return;
     }
@@ -140,16 +171,23 @@ $('input.actuador-input').on('click', function(e) {
         return; // let the event bubble away
     }
 
+    $('.loader').fadeIn('fast');
 	vibrar();
     e.preventDefault();
     let boton = $(this);
     let codigo = $(this).closest('.info-data').data('codigo');
-    let orden = $(this).data('orden');
+    let switch_v = $(this).data('switch_v');
+    let orden = '';
+    if (boton.prop('checked')) {
+        orden = codigosPersianas['per_encender']['valor'];
+    } else {
+        orden = codigosPersianas['per_apagar']['valor'];
+    }
 
     $.ajax({
         url: $(location).attr('pathname'),
         type: 'POST',
-        data: {tipo_envio: 'enviar', codigo: codigo, orden: orden},
+        data: {tipo_envio: 'enviar', codigo: codigo, switch_v: switch_v, orden: orden},
         dataType: "json",
         success: function(data) {
             if (data.success) {
@@ -162,6 +200,9 @@ $('input.actuador-input').on('click', function(e) {
         error: function(e) {
             alertPersonalizado(e.message);
             return false;
+        },
+        complete: function(e) {
+            $('.loader').fadeOut('fast');
         }
     });
     ready = true; // set flag

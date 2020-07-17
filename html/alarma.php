@@ -1,6 +1,6 @@
 <?php
 $titulo = 'Alarma';
-$imagen = 'thief-icon';
+$imagen = 'alarma';
 
 if (!empty($_POST)) {
     session_start();
@@ -68,10 +68,10 @@ $ultimaAccionAlarma = ultimaAccionAlarma($pdo);
 </div>
 
 <div class="container-fluid">
-    <div class="row" style="margin-top: 80px; margin-bottom: 100px;">
+    <div class="row" style="margin-top: 30px; margin-bottom: 30px;">
         <div id="clickFondo" class="col-sm text-center">
             <button id="button-alarm" data-estado="<?= $salida ?>" type="button" class="btn <?= $salida == '1'? $boton: 'btn-success' ?> btn-circle btn-xl">
-                <i class="fas fa-lock" style="margin-top: -30px;"></i>
+                <i class="fas fa-lock" style="margin-top: -10px;"></i>
             </button>
         </div>
     </div>
@@ -81,10 +81,10 @@ $ultimaAccionAlarma = ultimaAccionAlarma($pdo);
     <div class="card-header">
         <img src="imagenes/sensor2.png"> Sensores
         <button type="button" class="btn btn-dark btn-chevron">
-            <i class="fas fa-chevron-right"></i>
+            <i class="fas fa-chevron-down"></i>
         </button>
     </div>
-    <div class="card-body" style="display: none;">
+    <div class="card-body">
 
 <?php foreach ($sensores as $sensor) { ?>
     <div class="card text-white bg-dark card-elem">
@@ -105,4 +105,4 @@ $ultimaAccionAlarma = ultimaAccionAlarma($pdo);
 
 <?php include ('footer.php') ?>
 
-<script src="alarma.js?r=20200622" charset="utf-8"></script>
+<script src="alarma.js?r=20200625" charset="utf-8"></script>

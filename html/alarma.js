@@ -6,6 +6,8 @@ $('input.custom-control-input').on('click', function(e) {
         return; // let the event bubble away
     }
 
+    $('.loader').fadeIn('fast');
+    vibrar();
     e.preventDefault();
     boton = $(this);
     pin_sensor = $(this).data('id');
@@ -35,6 +37,9 @@ $('input.custom-control-input').on('click', function(e) {
         error: function(e) {
             ajaxError(e);
             return false;
+        },
+        complete: function(e) {
+            $('.loader').fadeOut('fast');
         }
     });
     ready = true; // set flag
@@ -43,7 +48,10 @@ $('input.custom-control-input').on('click', function(e) {
 
 
 $('#button-alarm').on('click', function() {
+    $('.loader').fadeIn('fast');
     vibrar();
+    $('#button-alarm').css({'box-shadow': ''});
+    $('#button-alarm').css({'background-color': ''});
     estado = $(this).data('estado') == '0'? '1': '0';
     if (estado == '1' && ($('input').length != $('input:checked').length)) {
         estado = '2';
@@ -71,6 +79,9 @@ $('#button-alarm').on('click', function() {
         },
         error: function(e) {
             ajaxError(e);
+        },
+        complete: function(e) {
+            $('.loader').fadeOut('fast');
         }
     });
 });

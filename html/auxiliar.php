@@ -1,6 +1,6 @@
 <?php
 
-$dev = (gethostname() != 'raspberrypi');
+// $dev = (gethostname() != 'raspberrypi');
 $pdo = conectar();
 $username = '';
 
@@ -117,13 +117,28 @@ function autoLogin($pdo) {
     }
 }
 
-function tempActual($pdo) {
-    $resultado = $pdo->query(
-        "SELECT TEMP
-           FROM placas
-           ORDER BY CREATED_AT DESC
-           LIMIT 1");
-    return $resultado->fetchColumn();
+function tempActual($pdo, $fecha = null) {
+    $sqlSent = 'SELECT TEMP FROM placas ';
+
+    $params = [];
+    if ($fecha) {
+        $sqlSent .= "WHERE created_at >= STR_TO_DATE(:fecha, '%Y-%m-%d') 
+            AND created_at < STR_TO_DATE(:fecha, '%Y-%m-%d') + INTERVAL '1' DAY ";
+        $params[':fecha'] = $fecha;
+    }
+    $sqlSent .= 'ORDER BY CREATED_AT ';
+    if (!$fecha) {
+        $sqlSent .= 'DESC LIMIT 1';
+    }
+
+    $sent = $pdo->prepare($sqlSent);
+    $sent->execute($params);
+
+    if ($fecha) {
+        return $sent->fetchAll(PDO::FETCH_COLUMN);
+    }else {
+        return $sent->fetchColumn();
+    }
 }
 
 function leerEstadoAlarma($pdo)
@@ -176,7 +191,7 @@ function escribirEstadoSensor($pdo, $pin, $activo)
 
 function ultimaAccionAlarma($pdo) {
     $resultado = $pdo->query(
-        "SELECT mensaje, created_at
+        "SELECT mensaje, DATE_FORMAT(created_at, \"%H:%i:%s %d/%m/%Y\") as fecha
            FROM logs
            WHERE mensaje LIKE 'Alarma%conectada%'
            ORDER BY created_at DESC
@@ -184,17 +199,20 @@ function ultimaAccionAlarma($pdo) {
     $logs = $resultado->fetchAll(PDO::FETCH_ASSOC);
     $mensaje = '';
     foreach ($logs as $log) {
-        $date = new DateTime($log['created_at']);
-        $fecha = $date->format('H:i:s d/m/Y');
         $men = ucfirst(substr($log['mensaje'], 7));
-        $mensaje .= $men . ' - ' . $fecha;
+        $mensaje .= $men . ' - ' . $log['fecha'];
     }
     return $mensaje;
 }
 
-function getHabitaciones($pdo)
+function getHabitaciones($pdo, $persianas = false)
 {
-    $sent = $pdo->prepare('SELECT * FROM habitaciones ORDER BY id');
+    $sqlSent = 'SELECT * FROM habitaciones h ';
+    if ($persianas) {
+        $sqlSent .= 'INNER JOIN persianas p ON h.id = p.habitacion_id ';
+    }
+    $sqlSent .= 'ORDER BY h.id';
+    $sent = $pdo->prepare($sqlSent);
     $sent->execute();
     return $sent->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -211,16 +229,16 @@ function getPersianas($pdo)
     return $pers;
 }
 
-function getActuadores($pdo)
+function getDispositivos($pdo)
 {
-    $sent = $pdo->prepare('SELECT * FROM actuadores ORDER BY switch');
+    $sent = $pdo->prepare('SELECT * FROM dispositivos ORDER BY switch');
     $sent->execute();
-    $actsql = $sent->fetchAll(PDO::FETCH_ASSOC);
-    $acts = [];
-    foreach ($actsql as $act) {
-        $acts[$act['habitacion_id']][] = $act;
+    $dispsql = $sent->fetchAll(PDO::FETCH_ASSOC);
+    $disps = [];
+    foreach ($dispsql as $disp) {
+        $disps[$disp['habitacion_id']][] = $disp;
     }
-    return $acts;
+    return $disps;
 }
 
 function getCodigosPersianas($pdo)
@@ -235,3 +253,55 @@ function getCodigosPersianas($pdo)
 
     return $codigos;
 }
+
+function getLogs($pdo, $mensaje = '', $date = '', $limit = 100)
+{
+    $sqlSent = 'SELECT mensaje, DATE_FORMAT(created_at, "%H:%i:%s %d/%m/%Y") as created_at FROM logs ';
+
+    $params = [];
+
+    if ($mensaje != '') {
+        $sqlSent .= "WHERE mensaje LIKE CONCAT('%', :mensaje, '%') ";
+        $params[':mensaje'] = $mensaje;
+    }
+
+    if ($date != '') {
+        if ($mensaje != '') {
+            $sqlSent .= 'AND ';
+        } else {
+            $sqlSent .= 'WHERE ';
+        }
+        $sqlSent .= "created_at >= STR_TO_DATE(:fecha, '%Y-%m-%d') 
+            AND created_at < STR_TO_DATE(:fecha, '%Y-%m-%d') + INTERVAL '1' DAY ";
+        $params[':fecha'] = $date;
+    }
+
+    $sqlSent .= 'ORDER BY id DESC ';
+    if ($limit != 0) {
+        $sqlSent .= "LIMIT $limit ";
+    }
+    $sent = $pdo->prepare($sqlSent);
+    $sent->execute($params);
+
+    return $sent->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function zeropad($num)
+{
+   return (strlen($num) >= 2) ? $num : ('0' . $num);
+}
+
+function grabarPersiana($pdo, $codigo, $pos1, $pos2, $pos3, $pos4)
+{
+    $sent = $pdo->prepare("UPDATE persianas p
+                             JOIN habitaciones h ON p.habitacion_id = h.id
+                              SET p.posicion1 = :pos1, p.posicion2 = :pos2, p.posicion3 = :pos3, p.posicion4 = :pos4
+                            WHERE h.codigo=:codigo");
+    $sent->execute([':codigo' => $codigo, ':pos1' => $pos1, ':pos2' => $pos2, ':pos3' => $pos3, ':pos4' => $pos4]);
+}
+
+function enviarHangouts($mensaje)
+{
+    exec("sudo python /home/bear/py_scripts/enviar_hangouts.py \"$mensaje\"");
+}
+
