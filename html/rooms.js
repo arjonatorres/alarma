@@ -1,18 +1,19 @@
 var ready = false;
-var evento = [];
+evento = {};
 const MULTIP = 1000;
 
-rooms.forEach(function (item, index) {
-	evento[item['codigo']] = undefined
+let todasPersianas = $('.card-elem-per');
+todasPersianas.each(function (index) {
+	evento[$(this).data('codigo')] = undefined
 });
 $('.card-collapse > .card-header > .btn-chevron').on('click', function() {
     let objeto_pulsado = $(this);
-    let codigo = objeto_pulsado.closest('.info-data').data('codigo');
+    let id = objeto_pulsado.closest('.info-data').data('id');
     vibrar();
     if (objeto_pulsado.find('i').hasClass('fa-chevron-down')) {
-    	if (typeof evento[codigo] !== 'undefined') {
-			clearTimeout(evento[codigo]);
-			evento[codigo] = undefined;
+    	if (typeof evento[id] !== 'undefined') {
+			clearTimeout(evento[id]);
+			evento[id] = undefined;
 		}
         desplegar(objeto_pulsado);
         return;
@@ -24,39 +25,47 @@ $('.card-collapse > .card-header > .btn-chevron').on('click', function() {
 function recibirDatos(objeto_pulsado) {
 	sincronizando = true;
     $('.loader').fadeIn('fast');
-    let codigo = objeto_pulsado.closest('.info-data').data('codigo');
+    let codigos = [];
+    let nums_bytes = [];
+    let tipos_arduino = {};
+    let dispositivos = objeto_pulsado.closest('.info-data').find('.card-elem-dis');
+    dispositivos.each(function(index) {
+        let codigo = $(this).data('codigo');
+        codigos.push(codigo);
+        let tipoard = $(this).data('tipoard');
+        let tipo_arduino = tipoard.split('');
+        tipos_arduino[codigo] = tipo_arduino[0];
+        if (tipo_arduino[0] == 'R') {
+            nums_bytes.push(1 + parseInt(tipo_arduino[1]));
+        } else {
+            nums_bytes.push(3 + parseInt(tipo_arduino[1]));
+        }
+    });
     let orden = orden_per_solicitar;
-    let tipohab = objeto_pulsado.closest('.info-data').data('tipohab');
-    let num_bytes = 0;
-    let tipo_arduino = tipohab.split('');
-    if (tipo_arduino[0] == 'R') {
-    	num_bytes = 1 + parseInt(tipo_arduino[1]);
-    } else {
-    	num_bytes = 3 + parseInt(tipo_arduino[1]);
-    }
 
     $.ajax({
         url: $(location).attr('pathname'),
         type: 'POST',
-        data: {tipo_envio: 'recibir', codigo: codigo, orden: orden, num_bytes: num_bytes},
+        data: {tipo_envio: 'recibir', codigos: codigos, orden: orden, nums_bytes: nums_bytes},
         dataType: "json",
         success: function(data) {
             if (data.success) {
-                let datos = Object.values(data.message);
-                
-                if (tipo_arduino[0] == 'P') {
-                    let pertemp = objeto_pulsado.closest('.info-data').find('.card-elem-per');
-                    let dispositivos = objeto_pulsado.closest('.info-data').find('.card-elem-act');
-                    let estado = datos[1];
-                    let alturaPersiana = parseInt(datos[2], 16);
-                    let pos1 = pertemp.data('pos1');
-                    let pos2 = pertemp.data('pos2');
-                    let pos3 = pertemp.data('pos3');
-                    let pos4 = pertemp.data('pos4');
-                    let estados = datos.slice(3, 3 + dispositivos.length);
-                    valoresPersiana(pertemp, objeto_pulsado, codigo, estado, alturaPersiana, pos4);
-                    valoresDispositivos(dispositivos, estados);
+                let datosTotal = Object.values(data.message);
+                for (let i=0; i < datosTotal.length; i++) {
+                    datos = Object.values(datosTotal[i]);
+                    let codigo = datos[0];
+                    if (tipos_arduino[codigo] == 'P') {
+                        let pertemp = objeto_pulsado.closest('.info-data').find('.card-elem-per').filter('[data-codigo="' + codigo + '"]');
+                        let dispositivos = objeto_pulsado.closest('.info-data').find('.card-elem-dis').filter('[data-codigo="' + codigo + '"]');
+                        let estado = datos[1];
+                        let alturaPersiana = parseInt(datos[2], 16);
+                        let pos4 = pertemp.data('pos4');
+                        let estados = datos.slice(3);
+                        valoresPersiana(pertemp, objeto_pulsado, codigo, estado, alturaPersiana, pos4);
+                        valoresDispositivos(dispositivos, estados);
+                    }
                 }
+                
                 if (objeto_pulsado.closest('.info-data').find('i').hasClass('fa-chevron-right')) {
                 	desplegar(objeto_pulsado);
                 }
@@ -78,8 +87,9 @@ function recibirDatos(objeto_pulsado) {
 }
 
 function valoresDispositivos(dispositivos, estados) {
-    dispositivos.each(function(index) {
+    dispositivos.each(function() {
         let inputdisp = $(this).find('input');
+        let index = (inputdisp.data('switch')) - 1;
         // inputdisp.prop('checked');
         if (estados[index] == 1 && !inputdisp.prop('checked')) {
             inputdisp.trigger('click');
@@ -136,14 +146,15 @@ $('button.but-puls').on('click', function(e) {
     vibrar();
 
     let boton = $(this);
-    let codigo = $(this).closest('.info-data').data('codigo');
+    let habid = $(this).closest('.info-data').data('habid');
+    let codigo = $(this).closest('.card-elem-dis').data('codigo');
     let switch_v = $(this).data('switch_v');
     let orden = $(this).data('orden');;
 
     $.ajax({
         url: $(location).attr('pathname'),
         type: 'POST',
-        data: {tipo_envio: 'enviar', codigo: codigo,switch_v: switch_v, orden: orden},
+        data: {tipo_envio: 'enviar', codigo: codigo,switch_v: switch_v, orden: orden, habid: habid},
         dataType: "json",
         success: function(data) {
             if (!data.success) {
@@ -175,7 +186,8 @@ $('input.dispositivo-input').on('click', function(e) {
 	vibrar();
     e.preventDefault();
     let boton = $(this);
-    let codigo = $(this).closest('.info-data').data('codigo');
+    let habid = $(this).closest('.info-data').data('habid');
+    let codigo = $(this).closest('.card-elem-dis').data('codigo');
     let switch_v = $(this).data('switch_v');
     let orden = '';
     if (boton.prop('checked')) {
@@ -187,7 +199,7 @@ $('input.dispositivo-input').on('click', function(e) {
     $.ajax({
         url: $(location).attr('pathname'),
         type: 'POST',
-        data: {tipo_envio: 'enviar', codigo: codigo, switch_v: switch_v, orden: orden},
+        data: {tipo_envio: 'enviar', codigo: codigo, switch_v: switch_v, orden: orden, habid: habid},
         dataType: "json",
         success: function(data) {
             if (data.success) {
@@ -211,16 +223,17 @@ $('input.dispositivo-input').on('click', function(e) {
 
 $('.card-elem .btn-per, .card-elem .btn-por').on('click', function() {
 	boton = $(this);
-    let codigo = $(this).closest('.info-data').data('codigo');
+    let codigo = $(this).closest('.card-elem').data('codigo');
     let orden = $(this).data('orden');
     let tipo = $(this).data('tipo');
+    let habid = $(this).closest('.info-data').data('habid');
 
     vibrar();
     boton.closest('.info-data').find('.card-elem .btn-per:not(.btn-stop), .card-elem .btn-por').attr('disabled', true);
     $.ajax({
         url: $(location).attr('pathname'),
         type: 'POST',
-        data: {tipo_envio: 'enviar', codigo: codigo, orden: orden, tipo: tipo},
+        data: {tipo_envio: 'enviar', codigo: codigo, orden: orden, tipo: tipo, habid: habid},
         dataType: "json",
         success: function(data) {
             if (data.success) {

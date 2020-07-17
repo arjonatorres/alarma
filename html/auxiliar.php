@@ -219,7 +219,9 @@ function getHabitaciones($pdo, $persianas = false)
 
 function getPersianas($pdo)
 {
-    $sent = $pdo->prepare('SELECT * FROM persianas');
+    $sqlSent = 'SELECT p.*, a.codigo FROM persianas p ';
+    $sqlSent .= 'INNER JOIN arduinos a ON a.id = p.arduino_id';
+    $sent = $pdo->prepare($sqlSent);
     $sent->execute();
     $persql = $sent->fetchAll(PDO::FETCH_ASSOC);
     $pers = [];
@@ -231,7 +233,9 @@ function getPersianas($pdo)
 
 function getDispositivos($pdo)
 {
-    $sent = $pdo->prepare('SELECT * FROM dispositivos ORDER BY switch');
+    $sqlSent = 'SELECT d.*, a.codigo, a.tipo as tipo_arduino FROM dispositivos d ';
+    $sqlSent .= 'INNER JOIN arduinos a ON a.id = d.arduino_id ORDER BY switch';
+    $sent = $pdo->prepare($sqlSent);
     $sent->execute();
     $dispsql = $sent->fetchAll(PDO::FETCH_ASSOC);
     $disps = [];

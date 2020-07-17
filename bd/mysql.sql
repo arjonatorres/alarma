@@ -16,7 +16,7 @@ CREATE TABLE usuarios
 DROP TABLE IF EXISTS parametros CASCADE;
 CREATE TABLE parametros
 (
-  nombre    VARCHAR(255) PRIMARY KEY,
+  nombre    VARCHAR(255)  PRIMARY KEY,
   valor     VARCHAR(255),
   adicional VARCHAR(255)
 );
@@ -32,8 +32,8 @@ CREATE TABLE logs
 DROP TABLE IF EXISTS placas CASCADE;
 CREATE TABLE placas
 (
-  id         SERIAL   PRIMARY KEY,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id         SERIAL     PRIMARY KEY,
+  created_at DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP,
   temp       NUMERIC(3)
 );
 
@@ -41,9 +41,15 @@ DROP TABLE IF EXISTS habitaciones CASCADE;
 CREATE TABLE habitaciones
 (
   id     SERIAL        PRIMARY KEY,
-  codigo VARCHAR(2),
   nombre VARCHAR(255),
-  icono  VARCHAR(255),
+  icono  VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS arduinos CASCADE;
+CREATE TABLE arduinos
+(
+  id     SERIAL                      PRIMARY KEY,
+  codigo VARCHAR(2),
   tipo   VARCHAR(10)
 );
 
@@ -51,12 +57,15 @@ DROP TABLE IF EXISTS persianas CASCADE;
 CREATE TABLE persianas
 (
   id            SERIAL             PRIMARY KEY,
-  habitacion_id BIGINT(20) unsigned,
+  nombre        VARCHAR(255),
   posicion1     NUMERIC(3),
   posicion2     NUMERIC(3),
   posicion3     NUMERIC(3),
   posicion4     NUMERIC(4),
-  CONSTRAINT fk_per_hab_id         FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id)
+  habitacion_id BIGINT(20) unsigned,
+  arduino_id    BIGINT(20) unsigned,
+  CONSTRAINT fk_per_hab_id         FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id),
+  CONSTRAINT fk_per_ard_id         FOREIGN KEY (arduino_id) REFERENCES arduinos(id)
 );
 
 DROP TABLE IF EXISTS dispositivos CASCADE;
@@ -68,7 +77,9 @@ CREATE TABLE dispositivos
   switch        NUMERIC(2),
   icono         VARCHAR(255),
   habitacion_id BIGINT(20) unsigned,
-  CONSTRAINT fk_act_hab_id         FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id)
+  arduino_id    BIGINT(20) unsigned,
+  CONSTRAINT fk_dis_hab_id         FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id),
+  CONSTRAINT fk_dis_ard_id         FOREIGN KEY (arduino_id) REFERENCES arduinos(id)
 );
 
 DROP TABLE IF EXISTS sensores CASCADE;
@@ -138,26 +149,35 @@ INSERT INTO parametros (nombre, valor, adicional)
          ('per_switch7', '87', DEFAULT),
          ('per_switch8', '88', DEFAULT);
 
-INSERT INTO habitaciones (codigo, nombre, icono, tipo)
-  VALUES ('10', 'Salón', 'salon', 'P2'),
-         ('11', 'Cuarto ordenador', 'ordenador', 'P2'),
-         ('12', 'Dormitorio matrimonio', 'dormitorio1', 'P2'),
-         ('13', 'Baño matrimonio', 'bano', 'P2'),
-         ('14', 'Dormitorio derecha', 'dormitorio2', 'P2'),
-         ('15', 'Dormitorio izquierda', 'dormitorio3', 'P2'),
-         ('16', 'Patio', 'patio', 'R8');
+INSERT INTO habitaciones (nombre, icono)
+  VALUES ('Salón', 'salon'),
+         ('Cuarto ordenador', 'ordenador'),
+         ('Dormitorio matrimonio', 'dormitorio1'),
+         ('Baño matrimonio', 'bano'),
+         ('Dormitorio derecha', 'dormitorio2'),
+         ('Dormitorio izquierda', 'dormitorio3'),
+         ('Patio', 'patio');
 
-INSERT INTO persianas (habitacion_id, posicion1, posicion2, posicion3, posicion4)
-VALUES (1, 6, 14, 20, 28),
-       (2, 4, 11, 14, 18),
-       (3, 9, 20, 28, 35),
-       (4, 5, 12, 18, 22),
-       (5, 7, 12, 19, 27),
-       (6, 10, 18, 28, 37);
+INSERT INTO arduinos (codigo, tipo)
+  VALUES ('10', 'P2'),
+         ('11', 'P2'),
+         ('12', 'P2'),
+         ('13', 'P2'),
+         ('14', 'P2'),
+         ('15', 'P2'),
+         ('16', 'R8');
 
-INSERT INTO dispositivos (nombre, tipo, switch, icono, habitacion_id)
-VALUES ('Lamparita', 'I', 1, 'lamp', 1),
-       ('Lampara', 'I', 1, 'lamparita', 2);
+INSERT INTO persianas (nombre, posicion1, posicion2, posicion3, posicion4, habitacion_id, arduino_id)
+VALUES ('Persiana', 6, 14, 20, 28, 1, 1),
+       ('Persiana', 4, 11, 14, 18, 2, 2),
+       ('Persiana', 9, 20, 28, 35, 3, 3),
+       ('Persiana', 5, 12, 18, 22, 4, 4),
+       ('Persiana', 7, 12, 19, 27, 5, 5),
+       ('Persiana', 10, 18, 28, 37, 6, 6);
+
+INSERT INTO dispositivos (nombre, tipo, switch, icono, habitacion_id, arduino_id)
+VALUES ('Lamparita', 'I', 1, 'lamp', 1, 1),
+       ('Lampara', 'I', 1, 'lamparita', 2, 2);
 
 INSERT INTO sensores (pin, nombre)
   VALUES (5, 'salón'),
