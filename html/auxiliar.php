@@ -207,9 +207,10 @@ function ultimaAccionAlarma($pdo) {
 
 function getHabitaciones($pdo, $persianas = false)
 {
-    $sqlSent = 'SELECT * FROM habitaciones h ';
+    $sqlSent = 'SELECT *, h.nombre as habnom FROM habitaciones h ';
     if ($persianas) {
         $sqlSent .= 'INNER JOIN persianas p ON h.id = p.habitacion_id ';
+        $sqlSent .= 'INNER JOIN arduinos a ON a.id = p.arduino_id ';
     }
     $sqlSent .= 'ORDER BY h.id';
     $sent = $pdo->prepare($sqlSent);
@@ -309,3 +310,30 @@ function enviarHangouts($mensaje)
     exec("sudo python /home/bear/py_scripts/enviar_hangouts.py \"$mensaje\"");
 }
 
+function getDiasSemana()
+{
+    return [
+        1 => 'lun',
+        2 => 'mar',
+        3 => 'mie',
+        4 => 'jue',
+        5 => 'vie',
+        6 => 'sab',
+        0 => 'dom',
+    ];
+}
+
+function actDesacEvento($pdo, $idEvento, $accion)
+{
+    $sent = $pdo->prepare('UPDATE eventos
+                           SET activo = :accion
+                           WHERE id = :id');
+    return $sent->execute([':id' => $idEvento, ':accion' => $accion]);
+}
+
+function borrarEvento($pdo, $idEvento)
+{
+    $sent = $pdo->prepare('DELETE FROM eventos
+                           WHERE id = :id');
+    return $sent->execute([':id' => $idEvento]);
+}

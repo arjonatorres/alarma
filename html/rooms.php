@@ -23,10 +23,9 @@ if (!empty($_POST)) {
                 $habId = $_POST['habid'];
                 if (isset($_POST['switch_v'])) {
                     $switch_v = $_POST['switch_v'];
-                    exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden $switch_v", $output, $retVar);
-                } else {
-                    exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden", $output, $retVar);
+                    $orden .= $switch_v;
                 }
+                exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden", $output, $retVar);
                 
                 if ($retVar == 0) {
                     $jsondata["success"] = true;
@@ -82,7 +81,7 @@ if (!empty($_POST)) {
                 $results = [];
                 foreach ($codigos as $key => $codigo) {
                     $numBytes = $numsBytes[$key];
-                    $codigo = '11'; // todo eliminar esta fila
+                    // $codigo = '11'; // todo eliminar esta fila
                     exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden $numBytes", $output, $retVar);
                     $output = strtoupper($output[0]);
                     $outputValues = str_split($output, 2);
@@ -220,4 +219,4 @@ $ordenIcono = [
     rooms = <?= json_encode($rooms) ?>;
     codigosPersianas = <?= json_encode($codigosPersianas); ?>
 </script>
-<script src="rooms.js?r=20200705" charset="utf-8"></script>
+<script src="rooms.js?r=20200707" charset="utf-8"></script>

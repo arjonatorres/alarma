@@ -41,6 +41,13 @@ function recibirDatos(objeto_pulsado) {
             nums_bytes.push(3 + parseInt(tipo_arduino[1]));
         }
     });
+    let persianas = objeto_pulsado.closest('.info-data').find('.card-elem-per');
+    persianas.each(function(index) {
+        let codigo = $(this).data('codigo');
+        codigos.push(codigo);
+    });
+    codigos = [...new Set(codigos)]
+
     let orden = orden_per_solicitar;
 
     $.ajax({
@@ -191,9 +198,9 @@ $('input.dispositivo-input').on('click', function(e) {
     let switch_v = $(this).data('switch_v');
     let orden = '';
     if (boton.prop('checked')) {
-        orden = codigosPersianas['per_encender']['valor'];
+        orden = codigosPersianas['per_switch_encender']['valor'];
     } else {
-        orden = codigosPersianas['per_apagar']['valor'];
+        orden = codigosPersianas['per_switch_apagar']['valor'];
     }
 
     $.ajax({

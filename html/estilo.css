@@ -211,7 +211,7 @@ div.no-padding {
 	margin-left: 8px;
 }
 
-.card-elem .switch-slider {
+.card-elem .switch-slider, .card-event .switch-slider {
 	position: absolute;
 	right: 0px;
 }
@@ -234,6 +234,16 @@ div.pos-persiana > p {
     padding: 6px 4px;
     border-radius: 20px;
     font-size: 20px;
+    line-height: 1;
+    border: 2px solid #343a40!important;
+}
+
+.btn-circle-md {
+    width: 60px;
+    height: 60px;
+    padding: 6px 4px;
+    border-radius: 30px;
+    font-size: 30px;
     line-height: 1;
     border: 2px solid #343a40!important;
 }
@@ -378,7 +388,7 @@ div.search-log > div.row {
 
 /* Modals */
 
-#alertModal div.modal-content {
+#alertModal div.modal-content, #borrarModal div.modal-content {
 	color: #545b62;
 }
 
@@ -479,4 +489,111 @@ div.search-placas button.btn {
 	display: inline;
 	margin-left: -145px;
 	margin-top: 48px;
+}
+
+ul.nav-tabs {
+	border-bottom-color: #17a2b8;
+}
+
+ul.nav-tabs > li.nav-item > a.nav-link {
+	color: #fff;
+}
+
+ul.nav-tabs > li.nav-item > a.active {
+	background-color: #17a2b8;
+	border-color: #17a2b8;
+}
+
+div.card-header.card-tabs {
+	padding: .75rem 0px 0px 0px!important;
+	border-bottom: 0px!important;
+}
+
+div.card-body.card-tabs {
+	border: 1px solid #17a2b8;
+	border-top: 0px solid #17a2b8;
+}
+
+div.card-tabs .btn-rounded {
+	border-radius: 50px;
+	width: 25px;
+	height: 25px;
+	font-size: 12px;
+	padding: 5px 0px 5px 0px;
+	border: 1px solid #17a2b8;
+	color: #fff;
+}
+
+div.card-tabs .btn-rounded-lg {
+	border-radius: 70px;
+	width: 35px;
+	height: 35px;
+	font-size: 12px;
+	padding: 7px 0px 7px 0px;
+	border: 1px solid #17a2b8;
+	color: #fff;
+}
+
+div.card-tabs .btn-rounded-lg.active, div.card-tabs .btn-rounded.active {
+	background-color: #17a2b8;
+}
+
+div.card-tabs .dist-center {
+	justify-content: space-evenly;
+	display: flex;
+}
+
+div.card-tabs input.input-dias {
+	display: none;
+}
+
+div.event-row {
+	margin-top: 25px;
+}
+
+.custom-radio .custom-control-label {
+	padding-left: 5px;
+}
+.custom-radio .custom-control-input~.custom-control-label::before, .custom-radio .custom-control-input~.custom-control-label::after {
+	width: 25px;
+	height: 25px;
+	margin-top: -5px;
+	border-color: #17a2b8;
+	background-color: transparent;
+}
+
+.custom-radio .custom-control-input:checked~.custom-control-label::before {
+    background-color: #17a2b8;
+}
+
+div.opt-int {
+	padding-left: 10px;
+}
+
+button.new-event {
+	color: #fff;
+	position: fixed;
+	z-index: 1000;
+	bottom: 75px;
+	right: 20px;
+	font-size: 20px;
+	text-align: center;
+}
+
+button.new-event i {
+
+}
+
+@media (max-width: 768px) {
+	div.nombre-evento {
+		width: 260px;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+}
+.card-collapse > .card-header > div.nombre-evento > img {
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
 }

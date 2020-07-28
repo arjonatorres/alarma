@@ -52,7 +52,7 @@ if (!empty($_POST)) {
             if ($nombreOrden != '' && $nombreLugar != '') {
                 $mensaje = ucfirst($nombreOrden) . ' persianas ' . $nombreLugar . ' por ' . $username;
                 escribirLog($pdo, $mensaje);
-                exec("sudo python /home/bear/py_scripts/enviar_hangouts.py \"$mensaje\"");
+                enviarHangouts($mensaje);
             }
         } else {
             $jsondata["success"] = false;
@@ -70,11 +70,11 @@ if (!empty($_POST)) {
 
 include ('header.php');
 
-$rooms = getHabitaciones($pdo);
+$rooms = getHabitaciones($pdo, true);
 $nombresHabitaciones = [];
 
 foreach ($rooms as $key => $value) {
-    $nombresHabitaciones[$value['codigo']] = $value['nombre'];
+    $nombresHabitaciones[$value['codigo']] = $value['habnom'];
 }
 $codigosPersianas = getCodigosPersianas($pdo);
 
@@ -82,6 +82,8 @@ $dists = [
     'all',
     'palta',
     'pbaja',
+    'onorte',
+    'osur',
     'paonorte',
     'paosur'
 ];

@@ -99,17 +99,21 @@ CREATE TABLE rfid
   CONSTRAINT fk_rfid_usu_id       FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
-DROP TABLE IF EXISTS horarios CASCADE;
-CREATE TABLE horarios
+DROP TABLE IF EXISTS eventos CASCADE;
+CREATE TABLE eventos
 (
-  id      SERIAL       PRIMARY KEY,
-  codigo  VARCHAR(2),
-  orden   VARCHAR(10),
-  repetir BOOLEAN,
-  dias    VARCHAR(20),
-  tipo    VARCHAR(10),
-  hora    TIME(0),
-  activo  BOOLEAN
+  id               SERIAL       PRIMARY KEY,
+  tipo             VARCHAR(50),
+  nombre           VARCHAR(255),
+  tipo_dispositivo VARCHAR(50),
+  ubicacion        VARCHAR(50),
+  codigo           VARCHAR(255),
+  orden            VARCHAR(10),
+  repetir          BOOLEAN,
+  dias             VARCHAR(20),
+  comienzo         VARCHAR(20),
+  hora             TIME(0),
+  activo           BOOLEAN
 );
 
 
@@ -117,6 +121,8 @@ CREATE TABLE horarios
 -- Insertamos algunos valores
 INSERT INTO parametros (nombre, valor, adicional)
   VALUES ('estado_alarma', '0', DEFAULT),
+         ('hora_alba', '08:00', DEFAULT),
+         ('hora_ocaso', '20:00', DEFAULT),
          ('per_normal', '0A', DEFAULT),
          ('per_subiendo', '0B', DEFAULT),
          ('per_bajando', '0C', DEFAULT),
@@ -137,8 +143,8 @@ INSERT INTO parametros (nombre, valor, adicional)
          ('per_solicitar_eeprom', '77', 'solicitar eeprom'),
          ('per_parar', '78', 'parar'),
          ('per_switch_pulsador', '79', 'pulsador'),
-         ('per_encender', '7A', 'encender'),
-         ('per_apagar', '7B', 'apagar'),
+         ('per_switch_encender', '7A', 'encender'),
+         ('per_switch_apagar', '7B', 'apagar'),
          ('per_switch_all', '80', DEFAULT),
          ('per_switch1', '81', DEFAULT),
          ('per_switch2', '82', DEFAULT),
@@ -189,6 +195,7 @@ INSERT INTO rfid (usuario_id, code)
   VALUES (1, 'a16c1624ff0d0a'),
          (2, '1133e42bed0d0a');
 
--- tipo: hora(hora normal), alba+-(amanecer), ocaso+-(anochecer)
-INSERT INTO horarios (codigo, orden, repetir, dias, tipo, hora, activo)
-  VALUES ('15', '7A81', true, '0,1,2,3,4,5,6', 'hora', '15:00:00', true);
+-- tipo: horario, temporizador. 
+-- comienzo: hora, alba(amanecer), ocaso(anochecer)
+INSERT INTO eventos (tipo, nombre, tipo_dispositivo, ubicacion, codigo, orden, repetir, dias, comienzo, hora, activo)
+  VALUES ('horario', 'Bajar persianas anochecer', 'dispositivo', 'room-2', '11', '7A81', true, '0,1,2,3,4,5,6', 'hora', '15:00:00', true);

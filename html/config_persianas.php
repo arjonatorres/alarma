@@ -12,7 +12,7 @@ if (!empty($_POST)) {
     $nombresHabitaciones = [];
 
     foreach ($rooms as $key => $value) {
-		$nombresHabitaciones[$value['codigo']] = $value['nombre'];
+		$nombresHabitaciones[$value['codigo']] = $value['habnom'];
 	}
 
     if (isset($_POST['codigo'])) {
@@ -76,7 +76,6 @@ foreach ($rooms as $key => $value) {
 
 $codigosPersianas = getCodigosPersianas($pdo);
 
-// $tempActual = tempActual($pdo);
 ?>
 <div class="row justify-content-center no-margin">
 	<div class="col-md-6 no-padding">
@@ -87,7 +86,7 @@ $codigosPersianas = getCodigosPersianas($pdo);
 					<select class="form-control" id="formControlHab">
 						<option hidden selected value>Selecciona una habitación</option>
 						<?php foreach ($rooms as $key => $room) { ?>
-						<option value="<?= $room['codigo'] ?>"><?= $room['nombre'] ?></option>
+						<option value="<?= $room['codigo'] ?>"><?= $room['habnom'] ?></option>
 						<?php } ?>
 					</select>
 				</div>

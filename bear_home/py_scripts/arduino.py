@@ -12,9 +12,6 @@ ser = serial.Serial('/dev/ttyUSB0',9600,bytesize=8,parity='N',stopbits=1,timeout
 
 
 if (tipo_envio == 'enviar'):
-	if (len(sys.argv) == 5):
-		switch = sys.argv[4].decode("hex")
-		cadena_envio += switch
 	enviarArduino(ser, cadena_envio)
 elif (tipo_envio == 'recibir'):
 	num_bytes = int(sys.argv[4])

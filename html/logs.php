@@ -65,9 +65,9 @@ $logs = getLogs($pdo);
 						</div>
 						<div class="form-group row" style="margin-bottom: 0px;">
 							<div class="col-12 text-right">
-							<button id="boton_reset" type="reset" class="btn btn-danger pull-right">Borrar</button>
-							<button id="boton_buscar" type="submit" class="btn btn-success pull-right" style="margin-left: 10px;">Buscar</button>
-						</div>
+								<button id="boton_reset" type="reset" class="btn btn-danger pull-right">Borrar</button>
+								<button id="boton_buscar" type="submit" class="btn btn-success pull-right" style="margin-left: 10px;">Buscar</button>
+							</div>
 						</div>
 					</div>
 				</form>
