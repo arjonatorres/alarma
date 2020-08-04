@@ -86,7 +86,9 @@ if (!empty($_POST)) {
 		}
 	} elseif (isset($_POST['borrar'])) {
 		$id = $_POST['id_bd'];
+		$tipo = $_POST['tipo'];
 		$nombre = $_POST['nombre_bd'];
+		$hora = $_POST['hora_bd'];
 		$sqlExec = borrarEvento($pdo, $id);
 		if ($sqlExec) {
 			$jsondata["success"] = true;
@@ -430,4 +432,4 @@ if (isset($_GET['id'])) {
 	codigosPersianas = <?= json_encode($codigosPersianas); ?>;
 	evento = <?= json_encode($evento); ?>
 </script>
-<script src="edit_eventos.js?r=20200712" charset="utf-8"></script>
+<script src="edit_eventos.js?r=20200713" charset="utf-8"></script>

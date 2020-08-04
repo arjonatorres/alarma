@@ -16,9 +16,10 @@ $boton = getBotonEstado($sensores);
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
         <script src="auxiliar.js?r=20200624" charset="utf-8"></script>
         <link rel="icon" href="http://bearcontrol.ddns.net/imagenes/home.png" type="image/png">
-        <link rel=StyleSheet href="estilo.css?r=20200711" type="text/css">
-        <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">-->
-        <script src="https://kit.fontawesome.com/9257192d6d.js" crossorigin="anonymous"></script>
+        <link rel=StyleSheet href="/css/estilo.css?r=20200711" type="text/css">
+        <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/9257192d6d.js" crossorigin="anonymous"></script>-->
+        <link href="/css/all.css" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=0">
     </head>
     <body>

@@ -2,9 +2,25 @@ html {
 	position:relative;
 	height:100%;
 }
+
 body {
-	background-image: url(imagenes/fondo.jpg); background-position: center center; background-repeat: no-repeat;
-	background-attachment: fixed; background-size: 100% 100%; background-color: black;color: white; height:100%;margin:0px;
+	background-image: url(/imagenes/madera11.jpg); background-position: center center; background-repeat: no-repeat;
+	background-attachment: fixed; background-size: 100% 100%; color: white; height:100%;margin:0px;
+}
+
+@media (max-width: 768px) {
+	body {
+		background-image: url(/imagenes/madera10.jpg); background-position: center center; background-repeat: no-repeat;
+		/*background-color: #e6f5f3;
+		background-color: #cdebe7;
+		background-color: #a0d0db;
+		background-color: #1f6977;
+
+		background-color: #e0eff3;
+		background-color: #ddd;
+		background-color: #fff;*/
+		background-attachment: fixed; background-size: 100% 100%; color: white; height:100%;margin:0px;
+	}
 }
 
 .loader {
@@ -14,7 +30,7 @@ body {
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url('imagenes/wait.gif') 50% 50% no-repeat rgba(0, 0, 0, 0.5);
+	background: url('/imagenes/wait.gif') 50% 50% no-repeat rgba(0, 0, 0, 0.5);
 	background-size: 25%;
 	opacity: 1;
 	display:none;
@@ -47,7 +63,7 @@ div.boton-row > div {
 .card-prime > div.card-header {
 	/*background-color: #343a40!important;*/
 	background-color: #17a2b8!important;
-	background-color: rgba(0,0,0,.03);
+	/*background-color: rgba(0,0,0,.03);*/
 }
 
 .card-prime > div.card-body {
@@ -81,7 +97,9 @@ img.boton {
 }
 
 button.boton {
-	background: rgba(0, 0, 0, 0.5);
+	/*background: rgba(0, 0, 0, 0.8);*/
+	background: rgba(50, 50, 50, 0.85);
+	/*background: #343a40;*/
 	border-radius: 8px;
 	font-size: 12px;
 	padding: 10px 10px 5px 10px;
@@ -129,14 +147,14 @@ div.no-padding {
 }
 
 .card-collapse {
-	background-color: rgba(52, 58, 64, 0.6)!important;
+	background-color: rgba(52, 58, 64, 0.7)!important;
 	margin-top: 8px;
 	/*margin-bottom: 8px;*/
 }
 
 .card-collapse > .card-header {
 	font-size: 17px;
-	background-color: rgba(52, 58, 64, 0.6)!important;
+	background-color: rgba(52, 58, 64, 0.7)!important;
 	padding: 7px 12px;
 }
 

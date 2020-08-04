@@ -250,12 +250,14 @@ $('#boton_borrar').on('click', function(e) {
 $('#boton_borrar_modal').on('click', function(e) {
 	$(".loader").fadeIn('fast');
 	var id_bd = evento['id'];
+	var tipo_bd = $('.nav-link.active').data('tipo');
 	var nombre_bd = $('#nombre').val();
+	var hora_bd = $('#time').val();
 
 	$.ajax({
 		url: $(location).attr('pathname'),
 		type: 'POST',
-		data: {id_bd: id_bd, nombre_bd: nombre_bd, borrar: ''},
+		data: {id_bd: id_bd, nombre_bd: nombre_bd, tipo: tipo_bd, hora_bd: hora_bd, borrar: ''},
 		dataType: "json",
 		success: function(data) {
 			if (data.success) {

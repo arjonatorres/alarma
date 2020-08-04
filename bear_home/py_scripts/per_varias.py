@@ -27,10 +27,10 @@ def getPersianas(pos, pers):
 	"""
 	db = conectar()
 	cur = db.cursor()
-	sql = "SELECT h.codigo, " + pos + ", p.posicion4 "\
-	"FROM persianas p INNER JOIN habitaciones h ON p.habitacion_id = h.id "\
-	"WHERE h.codigo in('" + pers + "') "\
-	"ORDER BY h.id"
+	sql = "SELECT a.codigo, " + pos + ", p.posicion4 "\
+	"FROM persianas p INNER JOIN arduinos a ON p.arduino_id = a.id "\
+	"WHERE a.codigo in('" + pers + "') "\
+	"ORDER BY a.id"
 	cur.execute(sql)
 	p = cur.fetchall()
 	res = {}
@@ -49,8 +49,9 @@ def enviarPosicionFinal(arrayPersianas):
 
 	db = conectar()
 	cur = db.cursor()
-	sql = "SELECT h.codigo, h.nombre, p.posicion4 "\
+	sql = "SELECT a.codigo, h.nombre, p.posicion4 "\
 	"FROM persianas p INNER JOIN habitaciones h ON p.habitacion_id = h.id "\
+	"INNER JOIN arduinos a ON p.arduino_id = a.id "\
 	"ORDER BY h.id"
 	cur.execute(sql)
 	p = cur.fetchall()

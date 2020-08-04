@@ -286,5 +286,6 @@ while True:
 		for pin, nombre in sensores.items():
 			if (GPIO.input(pin)):
 				tripleComprobacion(pin, nombre)
-	
+				break
+
 	sensor220v()

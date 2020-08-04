@@ -299,9 +299,9 @@ function zeropad($num)
 function grabarPersiana($pdo, $codigo, $pos1, $pos2, $pos3, $pos4)
 {
     $sent = $pdo->prepare("UPDATE persianas p
-                             JOIN habitaciones h ON p.habitacion_id = h.id
+                             JOIN arduinos a ON p.arduino_id = a.id
                               SET p.posicion1 = :pos1, p.posicion2 = :pos2, p.posicion3 = :pos3, p.posicion4 = :pos4
-                            WHERE h.codigo=:codigo");
+                            WHERE a.codigo=:codigo");
     $sent->execute([':codigo' => $codigo, ':pos1' => $pos1, ':pos2' => $pos2, ':pos3' => $pos3, ':pos4' => $pos4]);
 }
 
