@@ -305,9 +305,14 @@ function grabarPersiana($pdo, $codigo, $pos1, $pos2, $pos3, $pos4)
     $sent->execute([':codigo' => $codigo, ':pos1' => $pos1, ':pos2' => $pos2, ':pos3' => $pos3, ':pos4' => $pos4]);
 }
 
-function enviarHangouts($mensaje)
+function enviarHangouts($mensaje, $comillas = false)
 {
-    exec("sudo python /home/bear/py_scripts/enviar_hangouts.py \"$mensaje\"");
+    if ($comillas) {
+        $mensaje = str_replace('"', '\'', $mensaje);
+        exec("sudo python /home/bear/py_scripts/enviar_hangouts.py \"$mensaje\"");
+    } else {
+        exec("sudo python /home/bear/py_scripts/enviar_hangouts.py \"$mensaje\"");
+    }
 }
 
 function getDiasSemana()

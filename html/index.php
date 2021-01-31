@@ -35,6 +35,10 @@ $iconos = [
     [
         'href' => 'eventos',
         'title' => 'Eventos'
+    ],
+    [
+        'href' => 'camaras',
+        'title' => 'Camaras'
     ]
 ];
 ?>

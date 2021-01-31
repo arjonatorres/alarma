@@ -26,7 +26,7 @@ bear ALL=(ALL) NOPASSWD: ALL
 www-data ALL=(ALL) NOPASSWD: ALL
 
 
-Desactivamos e usuario pi
+Desactivamos el usuario pi
 =========================
 $ sudo usermod -L pi
 
@@ -77,6 +77,30 @@ $ sudo apt-get install php7.0 libapache2-mod-php7.0
 $ sudo apt-get install php7.0-mysql
 $ sudo apt-get install php7.0-mbstring
 $ sudo /etc/init.d/apache2 restart
+
+PHP 7.3
+=======
+sudo apt install php7.3-fpm php7.3-common php7.3-mbstring php7.3-xmlrpc php7.3-gd php7.3-xml php7.3-mysql php7.3-cli php7.3-zip php7.3-curl
+sudo nano /etc/php/7.3/fpm/php.ini
+a2enmod proxy_fcgi setenvif
+a2enconf php7.3-fpm
+
+update mysql.user set plugin = 'mysql_native_password' where User='root';
+FLUSH PRIVILEGES;
+exit;
+
+sudo a2enmod rewrite
+sudo service apache2 restart
+sudo nano /etc/apache2/sites-available/000-default.conf
+Agregar estás lineas, después de DocumentRoot /var/www/html:
+<Directory “/var/www/html”>
+AllowOverride All
+</Directory>
+sudo service apache2 restart
+
+find . -depth -name "* *" -execdir rename 's/ /_/g' "{}" \;
+chmod -R 755
+sudo find . -depth -name "*pwg_representative*" -execdir sudo chown -R www-data:www-data "{}" \;
 
 
 Instalar MySQL

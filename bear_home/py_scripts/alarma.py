@@ -201,7 +201,7 @@ def saltoalarma(nombre_salto):
 		GPIO.output(buzz,False)
 
 	GPIO.output(estado_alarma_flag,True)
-	print "tiempo agotado"
+	#print "tiempo agotado"
 	while True:
 		time.sleep(0.3)
 		if (estadot == '0'):
@@ -234,15 +234,23 @@ def sensor220v():
 	global xcorriente
 	#Se va la corriente
 	if ((xcorriente == 0) and (not(GPIO.input(corriente)))):
-		xcorriente = 1
-		enviar("Corriente 220v interrumpida", True, 'todos')
-		time.sleep(0.5)
+		time.sleep(0.15)
+		if (not(GPIO.input(corriente))):
+			time.sleep(0.15)
+			if (not(GPIO.input(corriente))):
+				xcorriente = 1
+				enviar("Corriente 220v interrumpida", True, 'todos')
+				time.sleep(0.5)
 
 	#Vuelve la corriente
 	if ((xcorriente == 1) and (GPIO.input(corriente))):
-		xcorriente = 0
-		enviar("Corriente 220v restablecida", True, 'todos')
-		time.sleep(0.5)
+		time.sleep(0.15)
+		if (GPIO.input(corriente)):
+			time.sleep(0.15)
+			if (GPIO.input(corriente)):
+				xcorriente = 0
+				enviar("Corriente 220v restablecida", True, 'todos')
+				time.sleep(0.5)
 
 
 # Cuerpo principal
@@ -264,7 +272,7 @@ sensores=initSensores()
 while True:
 	time.sleep(0.1)
 	if (GPIO.input(sensores_flag)):
-		print 'iniciando sensores'
+		#print 'iniciando sensores'
 		GPIO.output(sensores_flag,False)
 		sensores=initSensores()
 	if (GPIO.input(estado_alarma_flag)):
@@ -273,13 +281,13 @@ while True:
 
 		if (estadot == '0'):
 			buzzoff()
-			print("Alarma desconectada via movil")
+			#print("Alarma desconectada via movil")
 			time.sleep(0.1)
 		elif (estadot == '1'):
 			GPIO.output(buzz,True)
 			time.sleep(1)
 			GPIO.output(buzz,False)
-			print("Alarma conectada via movil")
+			#print("Alarma conectada via movil")
 
 
 	if (estadot == '1'):

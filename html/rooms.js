@@ -45,8 +45,8 @@ function recibirDatos(objeto_pulsado) {
     persianas.each(function(index) {
         let codigo = $(this).data('codigo');
         codigos.push(codigo);
+        nums_bytes.push(3);
     });
-    codigos = [...new Set(codigos)]
 
     let orden = orden_per_solicitar;
 
@@ -61,6 +61,9 @@ function recibirDatos(objeto_pulsado) {
                 for (let i=0; i < datosTotal.length; i++) {
                     datos = Object.values(datosTotal[i]);
                     let codigo = datos[0];
+                    if (tipos_arduino[codigo] == undefined) {
+                        tipos_arduino[codigo] = 'P';
+                    }
                     if (tipos_arduino[codigo] == 'P') {
                         let pertemp = objeto_pulsado.closest('.info-data').find('.card-elem-per').filter('[data-codigo="' + codigo + '"]');
                         let dispositivos = objeto_pulsado.closest('.info-data').find('.card-elem-dis').filter('[data-codigo="' + codigo + '"]');

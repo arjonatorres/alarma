@@ -143,9 +143,10 @@ def recibirArduino(ser, cadena_envio, num_bytes):
 	#ser.setRTS(True)
 	#time.sleep(0.03)
 	ser.write(cadena_envio)
-	time.sleep(0.01)
+	time.sleep(0.02)
 	ser.flushInput()
 	ser.setRTS(False)
+	time.sleep(0.02)
 	state=ser.read(num_bytes)
 
 	return state.encode('hex')

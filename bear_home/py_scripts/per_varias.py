@@ -60,8 +60,8 @@ def enviarPosicionFinal(arrayPersianas):
 	numMax = 0
 	for row in p:
 		if (not arrayPersianas.has_key(row[0])):
-			cadena_envio = row[0].decode("hex") + orden_solicitar
-			estado = recibirArduino(ser, cadena_envio, 5)
+			cadena_envio_rec = row[0].decode("hex") + orden_solicitar
+			estado = recibirArduino(ser, cadena_envio_rec, 5)
 			if (len(estado) != 10):
 				res[row[0]] = {'nombre': row[1], 'posFinal': 'error'}
 			else:
@@ -97,8 +97,8 @@ else:
 		time.sleep(alturaMax+1)
 		for persiana in arrayPersianas.keys():
 			arrayPersianas[persiana]['posFinal'] = 'error'
-			cadena_envio = persiana.decode("hex") + orden_solicitar
-			estado = recibirArduino(ser, cadena_envio, 5)
+			cadena_envio_rec2 = persiana.decode("hex") + orden_solicitar
+			estado = recibirArduino(ser, cadena_envio_rec2, 5)
 			if (len(estado) != 10):
 				continue
 			alturaHex = (estado[4:6])
@@ -107,9 +107,9 @@ else:
 				contador += 1
 		if (contador == len(arrayPersianas) or i == (intentos-1)):
 			break
+		enviarArduino(ser, cadena_envio)
 		enviar('Reintentando...', False)
 
 	enviarPosicionFinal(arrayPersianas)
-
 
 ser.close()

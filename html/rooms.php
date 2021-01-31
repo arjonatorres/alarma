@@ -79,14 +79,19 @@ if (!empty($_POST)) {
                 $numsBytes = $_POST['nums_bytes'];
                 $datosValidos = false;
                 $results = [];
+                $procesados = [];
                 foreach ($codigos as $key => $codigo) {
+                    if (in_array($codigo, $procesados)) {
+                        continue;
+                    }
+                    $procesados[] = $codigo;
                     $numBytes = $numsBytes[$key];
                     // $codigo = '11'; // todo eliminar esta fila
                     exec("sudo python /home/bear/py_scripts/arduino.py $tipo_envio $codigo $orden $numBytes", $output, $retVar);
                     $output = strtoupper($output[0]);
                     $outputValues = str_split($output, 2);
                     if ($outputValues[0] == $codigo && $retVar == 0) {
-                        $outputValues[0] = strval($codigo+$key);
+                        // $outputValues[0] = strval($codigo+$key);
                         $datosValidos = true;
                         $results[] = $outputValues;
                     } else {
@@ -219,4 +224,4 @@ $ordenIcono = [
     rooms = <?= json_encode($rooms) ?>;
     codigosPersianas = <?= json_encode($codigosPersianas); ?>
 </script>
-<script src="rooms.js?r=20200707" charset="utf-8"></script>
+<script src="rooms.js?r=20200709" charset="utf-8"></script>

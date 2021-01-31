@@ -24,7 +24,7 @@ function getHorarios($pdo, $hora, $dia) {
 		AND activo = '1'
 		AND dias LIKE '%$dia%'
 		AND comienzo LIKE 'alba%'
-		AND '$hora' = IF (comienzo LIKE '%+', DATE_ADD(STR_TO_DATE(@hora_alba, '%h:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE), DATE_SUB(STR_TO_DATE(@hora_alba, '%h:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE)) 
+		AND '$hora' = IF (comienzo LIKE '%+', DATE_ADD(STR_TO_DATE(@hora_alba, '%H:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE), DATE_SUB(STR_TO_DATE(@hora_alba, '%H:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE)) 
 		UNION
 		-- horario ocaso
 		SELECT * FROM eventos e
@@ -32,7 +32,7 @@ function getHorarios($pdo, $hora, $dia) {
 		AND activo = '1'
 		AND dias LIKE '%$dia%'
 		AND comienzo LIKE 'ocaso%'
-		AND '$hora' = IF (comienzo LIKE '%+', DATE_ADD(STR_TO_DATE(@hora_ocaso, '%h:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE), DATE_SUB(STR_TO_DATE(@hora_ocaso, '%h:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE)) 
+		AND '$hora' = IF (comienzo LIKE '%+', DATE_ADD(STR_TO_DATE(@hora_ocaso, '%H:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE), DATE_SUB(STR_TO_DATE(@hora_ocaso, '%H:%i') , INTERVAL (TIME_TO_SEC(e.hora)/60) MINUTE)) 
 		UNION
 		-- temporizador
 		SELECT * from eventos 
@@ -137,7 +137,7 @@ foreach ($horarios as $horario) {
 		$mensaje = "Evento \"$nombre\" ";
 		//echo $mensaje . PHP_EOL;
 		escribirLog($pdo, $mensaje . 'ejecutado');
-		enviarHangouts($mensaje);
+		enviarHangouts($mensaje . 'ejecutado', true);
 		if ($horario['repetir'] == '0' && $dia == substr($horario['dias'], -1)) {
 			actDesacEvento($pdo, $horario['id'], 0);
 			escribirLog($pdo, $mensaje . 'desactivado');

@@ -69,6 +69,7 @@ div.boton-row > div {
 .card-prime > div.card-body {
 	background: rgba(0, 0, 0, 0);
 	padding: 0px 5px 0px 5px;
+	margin-bottom: 65px;
 }
 
 .card-prime > div.card-header > h4 {
