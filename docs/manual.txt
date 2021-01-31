@@ -1,0 +1,166 @@
+=========================
+= CONFIGURACIÓN INICIAL =
+=========================
+
+IP Fija
+=======
+sudo nano /etc/dhcpcd.conf
+
+    # Example static IP configuration:
+    interface eth0
+    static ip_address=192.168.1.10/24
+    #static ip6_address=fd51:42f8:caae:d92e::ff/64
+    static routers=192.168.1.1
+    static domain_name_servers=8.8.8.8
+
+
+Crear Usuario Bear
+==================
+sudo adduser bear
+
+
+Dar Permisos de root a bear
+===========================
+$ sudo visudo
+bear ALL=(ALL) NOPASSWD: ALL
+www-data ALL=(ALL) NOPASSWD: ALL
+
+
+Desactivamos el usuario pi
+=========================
+$ sudo usermod -L pi
+
+
+Instalamos NoIP
+===============
+$ wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
+$ tar -zxvf noip-duc-linux.tar.gz
+$ cd noip-2.1.9-1
+$ sudo make
+$ sudo make install
+$ sudo nano /etc/init.d/noip2
+sudo /usr/local/bin/noip2
+$ sudo chmod +x /etc/init.d/noip2
+$ sudo update-rc.d noip2 defaults
+$ sudo /usr/local/bin/noip2
+Abrimos los puertos del router que queramos
+
+
+Instalar apache
+===============
+$ sudo apt install apache2
+
+
+Cambiamos el propietario del directorio html
+============================================
+$ cd /var/www/
+$ sudo chown -R www-data:www-data html
+$ sudo find html -type d -print -exec chmod 775 {} \;
+$ sudo find html -type f -print -exec chmod 664 {} \;
+
+
+Agregamos al grupo www-data el usuario bear
+===========================================
+$ usermod -a -G www-data bear
+
+
+Instalamos php7
+===============
+$ sudo nano /etc/apt/sources.list
+deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi
+$ sudo nano /etc/apt/preferences
+Package: *
+Pin: release n=jessie
+Pin-Priority: 600
+$ sudo apt-get update
+$ sudo apt-get install php7.0 libapache2-mod-php7.0
+$ sudo apt-get install php7.0-mysql
+$ sudo apt-get install php7.0-mbstring
+$ sudo /etc/init.d/apache2 restart
+
+PHP 7.3
+=======
+sudo apt install php7.3-fpm php7.3-common php7.3-mbstring php7.3-xmlrpc php7.3-gd php7.3-xml php7.3-mysql php7.3-cli php7.3-zip php7.3-curl
+sudo nano /etc/php/7.3/fpm/php.ini
+a2enmod proxy_fcgi setenvif
+a2enconf php7.3-fpm
+
+update mysql.user set plugin = 'mysql_native_password' where User='root';
+FLUSH PRIVILEGES;
+exit;
+
+sudo a2enmod rewrite
+sudo service apache2 restart
+sudo nano /etc/apache2/sites-available/000-default.conf
+Agregar estás lineas, después de DocumentRoot /var/www/html:
+<Directory “/var/www/html”>
+AllowOverride All
+</Directory>
+sudo service apache2 restart
+
+find . -depth -name "* *" -execdir rename 's/ /_/g' "{}" \;
+chmod -R 755
+sudo find . -depth -name "*pwg_representative*" -execdir sudo chown -R www-data:www-data "{}" \;
+
+
+Instalar MySQL
+==============
+$ sudo apt-get install mariadb-server
+- Creamos el usuario bear, y la bd bearcontrol
+https://www.luisllamas.es/como-instalar-mysql-en-raspberry-pi/
+
+- Cargamos las tablas
+$ sudo mysql -u bear -pbear -h localhost -D bearcontrol < mysql.sql
+
+- Activar acceso remoto
+$ sudo nano /etc/mysql/my.cnf
+[mysqld]
+bind-address = 0.0.0.0
+$ sudo mysql -u root -p -h localhost
+Grant All Privileges ON *.* to 'bear'@'%' Identified By 'bear';
+flush privileges;
+$ sudo service mysql restart
+
+
+Instalar Hangouts
+=================
+$ sudo apt-get install python-xmpp
+
+
+Instalar Python Serial
+======================
+$ sudo apt-get install python-serial
+
+
+Instalar Python MySQL Module
+============================
+sudo apt-get -y install python-mysql.connector
+
+
+Instalar Python Smbus Module
+============================
+sudo apt-get install python-smbus
+
+
+
+
+
+
+
+
+
+
+
+Entrada analógica I2C (Temperatura placas)
+==========================================
+http://www.diverteka.com/?p=1814
+
+
+Ejecutar al inicio
+==================
+/etc/rc.local
+
+Montar unidad USB
+=================
+sudo nano /etc/fstab
+    /dev/sda1 /media/usbcopia vfat defaults 0 0
