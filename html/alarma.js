@@ -68,10 +68,13 @@ $('#button-alarm').on('click', function() {
                 $('#button-alarm').css({'box-shadow': '0 0 0 0.0rem'});
                 if ($('#button-alarm').hasClass('btn-success')) {
                     $('#button-alarm').css({'background-color': '#28a745'});
+                    alarmaCam(0);
                 } else if ($('#button-alarm').hasClass('btn-danger')) {
                     $('#button-alarm').css({'background-color': '#dc3545'});
+                    alarmaCam(1);
                 } else if ($('#button-alarm').hasClass('btn-warning')) {
                     $('#button-alarm').css({'background-color': '#ffc107'});
+                    alarmaCam(1);
                 }
             } else {
                 alertPersonalizado(data.message);

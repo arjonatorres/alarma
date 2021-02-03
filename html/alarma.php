@@ -105,4 +105,4 @@ $ultimaAccionAlarma = ultimaAccionAlarma($pdo);
 
 <?php include ('footer.php') ?>
 
-<script src="alarma.js?r=20200625" charset="utf-8"></script>
+<script src="alarma.js?r=20210201" charset="utf-8"></script>
