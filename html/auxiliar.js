@@ -35,10 +35,13 @@ $(document).ready(function() {
                     $('#button-alarm-modal').css({'box-shadow': '0 0 0 0.0rem'});
                     if ($('#button-alarm-modal').hasClass('btn-success')) {
                         $('#button-alarm-modal').css({'background-color': '#28a745'});
+                        alarmaCam(0);
                     } else if ($('#button-alarm-modal').hasClass('btn-danger')) {
                         $('#button-alarm-modal').css({'background-color': '#dc3545'});
+                        alarmaCam(1);
                     } else if ($('#button-alarm-modal').hasClass('btn-warning')) {
                         $('#button-alarm-modal').css({'background-color': '#ffc107'});
+                        alarmaCam(1);
                     }
                     setTimeout(function() { $('#alarmModal').modal('hide'); }, 500);
                     
@@ -71,6 +74,14 @@ function desplegar(objeto, selfObj = false) {
         objeto.parent().next().slideToggle();
     }
     
+}
+
+function alarmaCam(command) {
+    $.ajax({
+        url: 'curl.php',
+        type: 'GET',
+        data: { isEnable: command }
+    });
 }
 
 function refresh() {
